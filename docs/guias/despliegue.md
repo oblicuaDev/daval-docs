@@ -13,15 +13,25 @@ Frontend estático y API como función serverless en el mismo dominio.
 
 ```json title="vercel.json"
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "functions": { "api/index.js": { "maxDuration": 30, "memory": 512 } },
+  "version": 2,
+  "builds": [
+    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
+    { "src": "api/index.js", "use": "@vercel/node" }
+  ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api" },
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
 ```
+
+:::warning[Por qué se usa `builds`]
+Sin `builds`, Vercel convierte **cada archivo** de `api/` en una función serverless (29 en este proyecto). El plan Hobby permite máximo **12 por deploy**, y el deploy falla con *"No more than 12 Serverless Functions can be added to a Deployment on the Hobby plan"*. Con `builds` explícitos, solo `api/index.js` es función y el resto del código de Express se empaqueta dentro. No agregues `functions` a este archivo: Vercel no permite usarlo junto con `builds`.
+:::
+
+:::caution[Repositorio privado en plan Hobby]
+Con el repo privado, Vercel solo despliega commits cuyo autor de GitHub esté conectado a la cuenta dueña del proyecto (**Account Settings → Authentication**). Los commits de otras cuentas, o con coautores externos, quedan en *Blocked*.
+:::
 
 Pasos:
 
@@ -34,7 +44,7 @@ Pasos:
 
 Limitaciones del modo serverless:
 
-- Cada invocación dura como máximo 30 s. La sincronización de productos de SIIGO y los correos que se envían después de responder pueden cortarse.
+- Cada invocación tiene un tiempo máximo (el que asigne Vercel al plan). La sincronización de productos de SIIGO y los correos que se envían después de responder pueden cortarse.
 - No hay disco persistente: las imágenes deben ir a Supabase Storage.
 
 ## Opción B: frontend en Vercel + API en Railway o Render

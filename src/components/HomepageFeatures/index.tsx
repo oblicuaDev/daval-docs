@@ -24,6 +24,24 @@ const iconProps = {
 
 const FeatureList: FeatureItem[] = [
   {
+    title: 'Manual de usuario',
+    to: '/docs/manual',
+    icon: (
+      <svg {...iconProps}>
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+    description: (
+      <>
+        Guías paso a paso para clientes, asesores y administradores: pedir,
+        seguir cotizaciones y configurar la plataforma.
+      </>
+    ),
+  },
+  {
     title: 'Arquitectura',
     to: '/docs/arquitectura/vision-general',
     icon: (

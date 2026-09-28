@@ -26,11 +26,11 @@ function HomepageHeader() {
           precios, rutas, cotizaciones e integración con SIIGO.
         </p>
         <div className={styles.buttons}>
-          <Link className="button button--primary button--lg" to="/docs/intro">
-            Guía del proyecto
+          <Link className="button button--primary button--lg" to="/docs/manual">
+            Manual de usuario
           </Link>
-          <Link className="button button--secondary button--lg" to="/docs/api/introduccion">
-            Referencia API
+          <Link className="button button--secondary button--lg" to="/docs/intro">
+            Documentación técnica
           </Link>
         </div>
         <div className={styles.stack}>

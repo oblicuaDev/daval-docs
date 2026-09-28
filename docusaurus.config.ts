@@ -67,6 +67,12 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
+          sidebarId: 'manualSidebar',
+          position: 'left',
+          label: 'Manual de usuario',
+        },
+        {
+          type: 'docSidebar',
           sidebarId: 'docsSidebar',
           position: 'left',
           label: 'Guía del proyecto',
@@ -82,6 +88,15 @@ const config: Config = {
     footer: {
       style: 'dark',
       links: [
+        {
+          title: 'Manual de usuario',
+          items: [
+            {label: 'Bienvenida', to: '/docs/manual'},
+            {label: 'Guía del cliente', to: '/docs/manual/cliente/inicio'},
+            {label: 'Guía del asesor', to: '/docs/manual/asesor/panel'},
+            {label: 'Preguntas frecuentes', to: '/docs/manual/preguntas-frecuentes'},
+          ],
+        },
         {
           title: 'Proyecto',
           items: [

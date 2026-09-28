@@ -15,12 +15,15 @@ Para dar acceso a un compañero:
 
 1. Pulsa **Nuevo usuario**.
 2. Escribe su **nombre completo**, **email** y, si aplica, la **sucursal** a la que pertenece.
-3. Guarda.
+3. Escribe una **contraseña** (mínimo 6 caracteres) y compártela con esa persona.
+4. Pulsa **Crear usuario**.
 
-Esa persona podrá entrar con su propio correo y ver los precios de tu empresa.
+Esa persona podrá entrar con su propio correo y verá los mismos precios que tú. Si le asignas una sucursal, sus pedidos usarán la ruta de esa sucursal.
+
+Con el ícono de lápiz puedes cambiar el nombre, el email, la sucursal o la contraseña de un usuario. Con la papelera lo desactivas: ya no podrá ingresar, pero sus cotizaciones se conservan.
 
 :::note
-La empresa debe conservar **al menos un usuario activo**, por eso no puedes eliminar el último.
+No puedes eliminar tu propio usuario, y la empresa debe conservar **al menos un usuario activo**.
 :::
 
 ## Sucursales
@@ -33,7 +36,9 @@ Si tienes otro punto de entrega:
 2. Escribe el **nombre** (por ejemplo, *Sede Norte*), la **ciudad** y la **dirección**.
 3. Guarda.
 
-La **ruta** de cada sucursal la asigna Distribuciones DAVAL. Una sucursal nueva queda sin ruta hasta que DAVAL la configure.
+La **ruta** de cada sucursal la asigna Distribuciones DAVAL y la ves junto a cada sucursal. Una sucursal nueva queda *Sin ruta asignada* hasta que DAVAL la configure.
+
+Al eliminar una sucursal, deja de aparecer pero su historial de cotizaciones se conserva.
 
 :::note
 La empresa debe conservar **al menos una sucursal** para poder pedir.

@@ -45,6 +45,7 @@ Todas las rutas cuelgan de `/api` (necesario para el rewrite de Vercel):
 | `/api/promotions` | `adminRouter.promotions` | `routes/admin.js` |
 | `/api/users` | `adminRouter.users` | `routes/admin.js` |
 | `/api/advisor` | `advisorRouter` | `routes/advisor.js` |
+| `/api/my-company` | `myCompanyRouter` | `routes/myCompany.js` |
 | `/api/integrations/siigo` | `siigoRouter` | `routes/siigo.js` |
 
 ## Middlewares

@@ -70,7 +70,7 @@ Todas las páginas se cargan con `lazy()` y un único `Suspense`, así cada rol 
 | `/cliente/confirmar-cotizacion` | `ClientConfirmOrder` — revisar carrito y enviar |
 | `/cliente/cotizaciones` | `ClientOrders` |
 | `/cliente/cotizaciones/:orderId` | `ClientOrderDetail` |
-| `/cliente/administrar` | `ClientManage` |
+| `/cliente/administrar` | `ClientManage` — usuarios y sucursales de su empresa (`/api/my-company`) |
 
 Las rutas antiguas con `pedidos` (`/admin/pedidos`, `/cliente/pedidos`, `/cliente/confirmar-pedido`, etc.) redirigen a sus equivalentes con `cotizaciones`. Cualquier ruta desconocida redirige a `/login`.
 

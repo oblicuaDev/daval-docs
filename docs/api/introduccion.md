@@ -128,6 +128,7 @@ Todas las respuestas de error tienen esta forma:
 | POST / PUT / DELETE | `/api/price-lists[/:id]` | admin | [Listas de precios](./listas-de-precios.md) |
 | GET | `/api/price-lists/:id/products` | Autenticado | [Listas de precios](./listas-de-precios.md) |
 | POST | `/api/price-lists/:id/products` | admin | [Listas de precios](./listas-de-precios.md) |
+| PUT | `/api/price-lists/:id/clients` | admin | [Listas de precios](./listas-de-precios.md) |
 | GET | `/api/companies` | Autenticado | [Empresas](./empresas.md) |
 | POST | `/api/companies` | Público | [Empresas](./empresas.md) |
 | PUT / DELETE | `/api/companies/:id` | admin | [Empresas](./empresas.md) |
@@ -143,6 +144,9 @@ Todas las respuestas de error tienen esta forma:
 | GET | `/api/advisor/clients` | admin, advisor | [Asesor](./asesor.md) |
 | GET | `/api/advisor/clients/:clientId/quotations` | admin, advisor | [Asesor](./asesor.md) |
 | GET | `/api/advisor/companies` | admin, advisor | [Asesor](./asesor.md) |
+| GET | `/api/my-company` | client | [Mi empresa](./mi-empresa.md) |
+| POST / PUT / DELETE | `/api/my-company/users[/:id]` | client | [Mi empresa](./mi-empresa.md) |
+| POST / PUT / DELETE | `/api/my-company/branches[/:id]` | client | [Mi empresa](./mi-empresa.md) |
 | * | `/api/integrations/siigo/*` | admin | [SIIGO](./siigo.md) |
 
 ## Colección de Postman

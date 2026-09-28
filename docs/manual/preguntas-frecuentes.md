@@ -42,7 +42,7 @@ No, lo hace el administrador. Tú puedes pegar el link de SIIGO si ya lo tienes.
 Revisa en **Productos** que esté **activo**. Si viene de SIIGO, sincroniza productos.
 
 **Un cliente ve un precio incorrecto.**
-Revisa su lista de precios en **Usuarios**, que el producto esté en esa lista y si tiene alguna promoción vigente.
+Revisa en **Listas de precios** qué lista tiene asignada, que el producto esté en esa lista y si tiene alguna promoción vigente.
 
 **La cotización no pasa a SIIGO.**
 Mira la tabla de errores en [Gestionar cotizaciones](./administrador/cotizaciones.md#si-falla).

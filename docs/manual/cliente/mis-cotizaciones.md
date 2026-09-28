@@ -9,13 +9,14 @@ En **Cotizaciones** ves todas las que has enviado, de la más reciente a la más
 
 ## Estados
 
-| Lo que ves | Estado | Qué significa |
-|---|---|---|
-| `sent` | **Enviada** | DAVAL la recibió y está pendiente de revisión. |
-| `approved` | **Aprobada** | Tu asesor la revisó y la aprobó. |
-| `synced` | **Sincronizada** | Ya quedó registrada en el sistema contable de DAVAL. Puede tener un enlace **Ver cotización** con el documento oficial en PDF. |
-| `rejected` | **Rechazada** | No se va a procesar. Revisa los comentarios o contacta a tu asesor. |
-| `draft` | **Borrador** | Aún no se ha enviado. |
+| Estado | Qué significa |
+|---|---|
+| **Enviada** | DAVAL la recibió y está pendiente de revisión. |
+| **Pendiente** | Está en revisión. |
+| **Aprobada** | Tu asesor la revisó y la aprobó. |
+| **Sincronizada** | Ya quedó registrada en el sistema contable de DAVAL. Puede tener un enlace **Ver cotización** con el documento oficial en PDF. |
+| **Rechazada** | No se va a procesar. Revisa los comentarios o contacta a tu asesor. |
+| **Borrador** | Aún no se ha enviado. |
 
 ## El detalle de una cotización
 

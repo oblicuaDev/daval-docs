@@ -25,11 +25,18 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
       "multiplier": 0.9,
       "is_default": false,
       "isDefault": false,
-      "active": true
+      "active": true,
+      "scope": "selected",
+      "clientIds": ["<users.id>", "<users.id>"]
     }
   ]
 }
 ```
+
+| Campo | Descripción |
+|---|---|
+| `scope` | `all` si es la lista general (`isDefault`), `selected` si no |
+| `clientIds` | IDs de **usuario** (`users.id`) de los clientes que tienen esta lista asignada |
 
 ## `POST /api/price-lists`
 
@@ -46,6 +53,25 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
 Solo puede existir **una** lista con `isDefault = true` (índice único parcial). Para cambiar la lista por defecto, desmarca primero la actual.
 
 **Respuesta `201`:** `{ "id": "<uuid>" }`
+
+## `PUT /api/price-lists/:id/clients`
+
+Define a quién aplica la lista.
+
+**Acceso:** admin
+
+**Body**
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `scope` | `all` \| `selected` | `all`: la lista pasa a ser la **lista general** (se desmarca la anterior). No cambia las asignaciones explícitas de ningún cliente. `selected`: se asigna exactamente a `userIds` |
+| `userIds` | uuid[] | IDs de usuario cliente. Con `selected`, los clientes que tenían la lista y no vienen aquí vuelven a la lista general |
+
+```json
+{ "scope": "selected", "userIds": ["0b56…", "db45…"] }
+```
+
+**Respuesta `200`:** `{ "id": "<uuid>", "scope": "selected", "assigned": 2 }` · **Errores:** `404 NOT_FOUND`.
 
 ## `PUT /api/price-lists/:id`
 

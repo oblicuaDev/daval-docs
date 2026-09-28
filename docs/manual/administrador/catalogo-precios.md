@@ -45,14 +45,19 @@ El botón **Importar Excel** es una demostración y todavía no procesa archivos
 
 1. Pulsa **Descargar plantilla** para obtener el formato.
 2. Llena el archivo con tres columnas: **SKU**, **Nombre producto**, **Precio** (solo números, sin puntos ni comas).
-3. Pulsa **Nueva lista**, escribe el **Nombre de la lista** (por ejemplo, *Lista Ferreterías Mayoristas*).
-4. En **Archivo de precios**, pulsa **Buscar archivo** y sube la plantilla en formato **CSV**.
-5. Guarda.
+3. Pulsa **Nueva lista** y escribe el **Nombre de la lista** (por ejemplo, *Lista Ferreterías Mayoristas*).
+4. En **Aplicación de la lista** elige:
+   - **Todos los clientes:** se vuelve la **lista general**, la que usan los clientes que no tienen una lista propia. Solo puede haber una lista general.
+   - **Clientes seleccionados:** busca y marca los clientes que usarán esta lista.
+5. En **Archivo de precios**, pulsa **Buscar archivo** y sube la plantilla en formato **CSV**.
+6. Guarda.
 
-Cada lista muestra cuántos **precios cargados** tiene. Para cambiar precios, edita la lista y sube el archivo de nuevo: **reemplaza** todos los precios anteriores.
+Cada lista muestra a quién aplica, cuántos **clientes asignados** y cuántos **precios cargados** tiene.
 
-:::caution[Asignar la lista a los clientes]
-La lista se aplica al cliente desde **Usuarios**, en el campo *lista de precios* de cada cliente. Los clientes sin lista usan la lista general. Por ahora la opción *Aplicación de la lista* de esta pantalla no cambia la lista de ningún cliente.
+Para editar una lista pulsa el lápiz. Puedes cambiar los clientes sin volver a subir el archivo. Si subes un archivo nuevo, **reemplaza** todos los precios anteriores.
+
+:::tip[Quitar un cliente de una lista]
+Desmárcalo en *Clientes seleccionados* y guarda. Ese cliente pasa a usar la lista general. También puedes cambiar la lista de un cliente desde **Usuarios**.
 :::
 
 ## Promociones

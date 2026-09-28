@@ -1,0 +1,527 @@
+/**
+ * Skin de DAVAL App — replica los tokens de daval-app/tailwind.config.js e index.css:
+ * fondo zinc-950, superficies zinc-900, bordes zinc-800, acento brand (índigo), Inter.
+ */
+
+:root {
+  /* zinc */
+  --zinc-950: #09090b;
+  --zinc-900: #18181b;
+  --zinc-800: #27272a;
+  --zinc-700: #3f3f46;
+  --zinc-600: #52525b;
+  --zinc-500: #71717a;
+  --zinc-400: #a1a1aa;
+  --zinc-300: #d4d4d8;
+  --zinc-200: #e4e4e7;
+  --zinc-100: #f4f4f5;
+  --zinc-50: #fafafa;
+
+  /* brand (tailwind.config.js) */
+  --brand-100: #e0e7ff;
+  --brand-400: #818cf8;
+  --brand-500: #6366f1;
+  --brand-600: #4f46e5;
+  --brand-700: #4338ca;
+  --brand-800: #3730a3;
+  --brand-900: #312e81;
+
+  --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 0 1px rgba(99, 102, 241, 0.3), 0 4px 20px rgba(99, 102, 241, 0.15);
+}
+
+/* El sitio es solo oscuro (colorMode.disableSwitch), igual que la app */
+:root,
+[data-theme='dark'] {
+  --ifm-color-primary: var(--brand-400);
+  --ifm-color-primary-dark: var(--brand-500);
+  --ifm-color-primary-darker: var(--brand-600);
+  --ifm-color-primary-darkest: var(--brand-700);
+  --ifm-color-primary-light: #a5b4fc;
+  --ifm-color-primary-lighter: #c7d2fe;
+  --ifm-color-primary-lightest: var(--brand-100);
+
+  --ifm-background-color: var(--zinc-950);
+  --ifm-background-surface-color: var(--zinc-950);
+  --ifm-font-color-base: var(--zinc-300);
+  --ifm-heading-color: var(--zinc-50);
+  --ifm-color-emphasis-100: var(--zinc-900);
+  --ifm-color-emphasis-200: var(--zinc-800);
+  --ifm-color-emphasis-300: var(--zinc-700);
+  --ifm-color-emphasis-600: var(--zinc-400);
+  --ifm-color-emphasis-700: var(--zinc-300);
+  --ifm-color-emphasis-800: var(--zinc-200);
+  --ifm-toc-border-color: var(--zinc-800);
+  --ifm-hr-background-color: var(--zinc-800);
+
+  --ifm-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ifm-font-size-base: 15px;
+  --ifm-line-height-base: 1.7;
+  --ifm-heading-font-weight: 600;
+  --ifm-code-font-size: 88%;
+  --ifm-global-radius: 0.5rem;
+
+  --ifm-navbar-background-color: rgba(9, 9, 11, 0.85);
+  --ifm-navbar-shadow: none;
+  --ifm-navbar-height: 3.25rem;
+  --ifm-navbar-link-color: var(--zinc-400);
+  --ifm-navbar-link-hover-color: var(--zinc-50);
+
+  --ifm-menu-color: var(--zinc-400);
+  --ifm-menu-color-active: var(--zinc-50);
+  --ifm-menu-color-background-active: var(--zinc-800);
+  --ifm-menu-color-background-hover: rgba(39, 39, 42, 0.7);
+
+  --ifm-footer-background-color: var(--zinc-950);
+  --ifm-footer-link-color: var(--zinc-400);
+  --ifm-footer-link-hover-color: var(--zinc-50);
+  --ifm-footer-title-color: var(--zinc-500);
+
+  --ifm-table-border-color: var(--zinc-800);
+  --ifm-table-head-background: var(--zinc-900);
+  --ifm-table-stripe-background: transparent;
+
+  --ifm-card-background-color: var(--zinc-900);
+  --docusaurus-highlighted-code-line-bg: rgba(99, 102, 241, 0.15);
+  --docsearch-searchbox-background: var(--zinc-900);
+}
+
+/* ── Base ─────────────────────────────────────────────────────────── */
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--zinc-950);
+  font-feature-settings: 'cv11', 'ss01', 'cv01';
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.35);
+  color: var(--zinc-50);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand-500);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--zinc-800); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--zinc-700); }
+
+/* ── Navbar ───────────────────────────────────────────────────────── */
+
+.navbar {
+  border-bottom: 1px solid rgba(39, 39, 42, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.navbar__brand {
+  gap: 0.25rem;
+}
+
+.navbar__logo {
+  height: 1.75rem;
+  width: 1.75rem;
+  border-radius: 0.375rem;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.navbar__logo img {
+  object-fit: cover;
+}
+
+.navbar__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--zinc-100);
+  letter-spacing: -0.01em;
+}
+
+.navbar__link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  padding: 0.35rem 0.7rem;
+  transition: color 150ms, background-color 150ms;
+}
+
+.navbar__link:hover {
+  background: rgba(39, 39, 42, 0.7);
+}
+
+.navbar__link--active {
+  color: var(--zinc-50);
+  background: var(--zinc-800);
+}
+
+.navbar-sidebar {
+  background: var(--zinc-950);
+}
+
+/* ── Sidebar (como .nav-item de la app) ───────────────────────────── */
+
+.theme-doc-sidebar-container {
+  border-right: 1px solid rgba(39, 39, 42, 0.6) !important;
+}
+
+.menu {
+  padding: 0.75rem 0.5rem !important;
+}
+
+.menu__link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  padding: 0.35rem 0.65rem;
+  transition: color 150ms, background-color 150ms;
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  color: var(--zinc-50);
+  background: var(--zinc-800);
+  box-shadow: inset 2px 0 0 var(--brand-500);
+}
+
+.menu__list-item-collapsible:hover {
+  background: rgba(39, 39, 42, 0.7);
+}
+
+/* Títulos de categoría como las secciones del sidebar de la app */
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--zinc-500);
+}
+
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link--active {
+  color: var(--zinc-300);
+}
+
+/* ── Contenido ────────────────────────────────────────────────────── */
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  letter-spacing: -0.02em;
+}
+
+.markdown h1 {
+  font-size: 2rem;
+}
+
+.markdown h2 {
+  font-size: 1.35rem;
+  margin-top: 2.5rem;
+}
+
+.markdown h3 {
+  font-size: 1.1rem;
+}
+
+.markdown a {
+  text-decoration: none;
+  border-bottom: 1px solid rgba(129, 140, 248, 0.35);
+  transition: border-color 150ms, color 150ms;
+}
+
+.markdown a:hover {
+  border-bottom-color: var(--brand-400);
+}
+
+.markdown a.hash-link {
+  border-bottom: none;
+}
+
+.markdown hr {
+  height: 1px;
+  margin: 2.5rem 0;
+}
+
+.markdown strong {
+  color: var(--zinc-100);
+  font-weight: 600;
+}
+
+/* Código en línea */
+code {
+  background: rgba(39, 39, 42, 0.6);
+  border: 1px solid rgba(63, 63, 70, 0.5);
+  color: var(--zinc-200);
+  border-radius: 0.375rem;
+  padding: 0.1rem 0.35rem;
+}
+
+/* Firma de endpoint en los títulos: ## `GET /api/...` */
+.markdown h2 code,
+.markdown h3 code {
+  background: rgba(49, 46, 129, 0.35);
+  border-color: rgba(55, 48, 163, 0.6);
+  color: var(--brand-100);
+  font-size: 0.85em;
+  padding: 0.2rem 0.55rem;
+}
+
+/* Bloques de código como .card */
+div[class*='codeBlockContainer'] {
+  border: 1px solid var(--zinc-800);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-card);
+  --prism-background-color: var(--zinc-900) !important;
+}
+
+/* El tema de Prism pone su fondo en línea; se fuerza la superficie zinc-900 */
+.theme-code-block pre,
+.theme-code-block pre code {
+  background: var(--zinc-900) !important;
+}
+
+div[class*='codeBlockContainer'] code {
+  background: transparent;
+  border: none;
+  padding: var(--ifm-pre-padding);
+}
+
+div[class*='codeBlockTitle'] {
+  background: var(--zinc-900) !important;
+  border-bottom: 1px solid var(--zinc-800) !important;
+  color: var(--zinc-400);
+  font-size: 0.8rem;
+}
+
+/* Tablas como las de la app (.table-head-cell / .table-cell dentro de .card) */
+.markdown table {
+  display: table;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--zinc-800);
+  border-radius: 0.75rem;
+  background: var(--zinc-900);
+  box-shadow: var(--shadow-card);
+  font-size: 0.875rem;
+}
+
+.markdown table thead tr {
+  background: transparent;
+  border: none;
+}
+
+.markdown table th {
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--zinc-500);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--zinc-800);
+  padding: 0.7rem 1rem;
+}
+
+.markdown table tr {
+  border: none;
+}
+
+.markdown table td {
+  color: var(--zinc-300);
+  border: none;
+  border-bottom: 1px solid rgba(39, 39, 42, 0.6);
+  padding: 0.65rem 1rem;
+  vertical-align: top;
+}
+
+.markdown table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown table tbody tr:hover {
+  background: rgba(39, 39, 42, 0.35);
+}
+
+/* En pantallas angostas la tabla vuelve a ser bloque con scroll horizontal */
+@media screen and (max-width: 996px) {
+  .markdown table {
+    display: block;
+    width: auto;
+    overflow-x: auto;
+  }
+}
+
+/* Admonitions como los avisos de la app (bg-*-950/50 border-*-800/50) */
+.theme-admonition {
+  border: 1px solid;
+  border-left-width: 3px;
+  border-radius: 0.75rem;
+  box-shadow: none;
+  font-size: 0.9rem;
+}
+
+.theme-admonition code {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.alert--secondary,
+.alert--info {
+  --ifm-alert-background-color: rgba(49, 46, 129, 0.25);
+  --ifm-alert-border-color: rgba(55, 48, 163, 0.6);
+  --ifm-alert-foreground-color: var(--brand-100);
+}
+
+.alert--success {
+  --ifm-alert-background-color: rgba(2, 44, 34, 0.5);
+  --ifm-alert-border-color: rgba(6, 95, 70, 0.6);
+  --ifm-alert-foreground-color: #a7f3d0;
+}
+
+.alert--warning {
+  --ifm-alert-background-color: rgba(69, 26, 3, 0.5);
+  --ifm-alert-border-color: rgba(146, 64, 14, 0.6);
+  --ifm-alert-foreground-color: #fde68a;
+}
+
+.alert--danger {
+  --ifm-alert-background-color: rgba(69, 10, 10, 0.5);
+  --ifm-alert-border-color: rgba(153, 27, 27, 0.6);
+  --ifm-alert-foreground-color: #fecaca;
+}
+
+/* ── Navegación de página, TOC, breadcrumbs ───────────────────────── */
+
+.pagination-nav__link {
+  background: var(--zinc-900);
+  border: 1px solid var(--zinc-800);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-card);
+  transition: border-color 150ms, box-shadow 150ms;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--brand-600);
+  box-shadow: var(--shadow-glow);
+}
+
+.pagination-nav__sublabel {
+  color: var(--zinc-500);
+  font-size: 0.75rem;
+}
+
+.pagination-nav__label {
+  color: var(--zinc-100);
+  font-weight: 600;
+}
+
+.table-of-contents {
+  font-size: 0.8rem;
+}
+
+.table-of-contents__link {
+  display: block;
+  color: var(--zinc-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-of-contents__link:hover,
+.table-of-contents__link--active {
+  color: var(--zinc-100);
+}
+
+.table-of-contents__link code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+.breadcrumbs__link {
+  font-size: 0.8rem;
+  color: var(--zinc-500);
+  background: transparent;
+}
+
+.breadcrumbs__item--active .breadcrumbs__link {
+  background: var(--zinc-900);
+  color: var(--zinc-200);
+  border: 1px solid var(--zinc-800);
+}
+
+/* ── Footer ───────────────────────────────────────────────────────── */
+
+.footer {
+  border-top: 1px solid rgba(39, 39, 42, 0.6);
+}
+
+.footer--dark {
+  --ifm-footer-background-color: var(--zinc-950);
+}
+
+.footer__title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.footer__link-item {
+  font-size: 0.875rem;
+}
+
+.footer__copyright {
+  color: var(--zinc-600);
+  font-size: 0.75rem;
+}
+
+/* ── Botones (como .btn-primary / .btn-secondary) ─────────────────── */
+
+.button {
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 150ms;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button--primary {
+  background: var(--brand-600);
+  border-color: var(--brand-600);
+  color: #fff;
+}
+
+.button--primary:hover {
+  background: var(--brand-500);
+  border-color: var(--brand-500);
+  color: #fff;
+}
+
+.button--secondary {
+  background: var(--zinc-800);
+  border: 1px solid var(--zinc-700);
+  color: var(--zinc-200);
+  font-weight: 500;
+}
+
+.button--secondary:hover {
+  background: var(--zinc-700);
+  border-color: var(--zinc-600);
+  color: var(--zinc-50);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

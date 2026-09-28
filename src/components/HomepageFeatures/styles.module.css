@@ -1,0 +1,70 @@
+.features {
+  padding: 1rem 0 5rem;
+  background: var(--zinc-950);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Como .card de la app */
+.card {
+  display: block;
+  height: 100%;
+  padding: 1.5rem;
+  background: var(--zinc-900);
+  border: 1px solid var(--zinc-800);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-card);
+  color: inherit;
+  transition: border-color 150ms, box-shadow 150ms, transform 150ms;
+}
+
+.card:hover {
+  text-decoration: none;
+  color: inherit;
+  border-color: var(--brand-700);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  background: rgba(49, 46, 129, 0.6);
+  border: 1px solid rgba(55, 48, 163, 0.5);
+  color: var(--brand-400);
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--zinc-100);
+  margin-bottom: 0.4rem;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: var(--zinc-400);
+  margin: 0;
+}
+
+.description code {
+  font-size: 0.8rem;
+}
+
+@media screen and (max-width: 996px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

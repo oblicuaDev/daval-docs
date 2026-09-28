@@ -11,7 +11,11 @@ En la interfaz de administración las categorías aparecen como **"Centros de co
 
 ## `GET /api/categories`
 
-**Acceso:** Autenticado
+**Acceso:** Autenticado, o un [API key de integración](./api-keys.md) con scope `catalog:read`
+
+:::info[Integraciones externas]
+Este es el único endpoint de administración que también acepta un [API key de integración](./api-keys.md) (scope `catalog:read`), pensado para consumidores de solo lectura como un chatbot. El resto de rutas de este archivo siguen exigiendo login de usuario.
+:::
 
 **Respuesta `200`** (filas en snake_case)
 

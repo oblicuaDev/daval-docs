@@ -50,3 +50,15 @@ En la lista de empresas locales, filtra por **Estado sincronización** (*Solo lo
 | **Solo local** | Existe solo en la plataforma |
 | **Error** | El último intento falló; revisa el mensaje |
 | **Bidireccional** (origen) | Se creó en la plataforma y luego se vinculó con SIIGO |
+
+
+---
+
+## Integraciones externas (API keys)
+
+Además de SIIGO, otros sistemas externos pueden necesitar leer datos de DAVAL sin ser un usuario de la plataforma — por ejemplo, un **chatbot** que consulta el catálogo. Para eso existen los **API keys de integración**, gestionados con `POST /api/api-keys`, `GET /api/api-keys` y `DELETE /api/api-keys/:id` (por ahora sin pantalla propia; se administran con esas peticiones directas).
+
+- Cada key tiene un nombre y uno o más **alcances** (`scopes`). Hoy el único disponible es `catalog:read`, que solo habilita la consulta de categorías (`GET /api/categories`); el catálogo de productos ya es público y no necesita key.
+- El valor completo del key **se muestra una sola vez**, al crearlo. Si se pierde, hay que revocarlo y generar uno nuevo.
+- Revocar un key es inmediato y no afecta a nadie más: ni a otros keys ni a los usuarios de la plataforma.
+- Un key de integración **nunca** da acceso a datos de clientes, promociones específicas ni listas de precios: solo a lo marcado explícitamente como de solo lectura.

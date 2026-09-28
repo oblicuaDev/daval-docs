@@ -122,7 +122,7 @@ Todas las respuestas de error tienen esta forma:
 | POST | `/api/routes` | admin | [Rutas](./rutas.md) |
 | PUT | `/api/routes/:id` | admin | [Rutas](./rutas.md) |
 | DELETE | `/api/routes/:id` | admin | [Rutas](./rutas.md) |
-| GET | `/api/categories` | Autenticado | [Categorías](./categorias.md) |
+| GET | `/api/categories` | Autenticado o API key `catalog:read` | [Categorías](./categorias.md) |
 | POST / PUT / DELETE | `/api/categories[/:id]` | admin | [Categorías](./categorias.md) |
 | GET | `/api/price-lists` | Autenticado | [Listas de precios](./listas-de-precios.md) |
 | POST / PUT / DELETE | `/api/price-lists[/:id]` | admin | [Listas de precios](./listas-de-precios.md) |
@@ -147,6 +147,7 @@ Todas las respuestas de error tienen esta forma:
 | GET | `/api/my-company` | client | [Mi empresa](./mi-empresa.md) |
 | POST / PUT / DELETE | `/api/my-company/users[/:id]` | client | [Mi empresa](./mi-empresa.md) |
 | POST / PUT / DELETE | `/api/my-company/branches[/:id]` | client | [Mi empresa](./mi-empresa.md) |
+| GET / POST / DELETE | `/api/api-keys[/:id]` | admin | [API keys de integración](./api-keys.md) |
 | * | `/api/integrations/siigo/*` | admin | [SIIGO](./siigo.md) |
 
 ## Colección de Postman

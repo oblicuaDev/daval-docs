@@ -69,10 +69,12 @@ Crea un usuario.
 **Proceso para rol `client`**
 
 1. Valida empresa, sucursal y lista de precios.
-2. En una transacción crea el usuario y la ficha `clients`, que hereda **ruta y asesor de la sucursal** y usa el NIT de la empresa (o un placeholder `NIT-xxxxxxxx`).
+2. En una transacción crea el usuario y la ficha `clients`, con su empresa y sucursal, que hereda **ruta y asesor de la sucursal** y usa el NIT de la empresa (o un placeholder `NIT-xxxxxxxx`).
 3. Después de responder, envía "Nuevo cliente asignado" al asesor de la sucursal y "Nuevo registro: Cliente" al administrador.
 
-**Respuesta `201`:** `{ "id": "<uuid>" }`
+**Respuesta `201`:** `{ "id": "<users.id>", "clientId": "<clients.id>" }`. `clientId` es `null` si el rol no es `client`.
+
+Para crear un cliente **sin** usuario de login (solo WhatsApp), usa [`POST /api/clients`](./clientes.md).
 
 **Errores**
 
@@ -95,7 +97,7 @@ Actualiza un usuario.
 **Body (todos opcionales):** `name`, `email`, `role`, `active`, `companyId`, `branchId`, `password` (se vuelve a hashear), `siigoSellerId` (acepta `null` para desasignar).
 
 :::note
-Este endpoint actualiza solo la tabla `users`. La lista de precios, ruta y asesor del cliente (tabla `clients`) no se cambian aquí.
+Si cambian `companyId` o `branchId` de un usuario cliente, también se actualizan la empresa y la sucursal de su ficha `clients`, junto con la ruta y el asesor de la nueva sucursal. La lista de precios se cambia desde [`PUT /api/clients/:id`](./clientes.md) o desde [listas de precios](./listas-de-precios.md).
 :::
 
 **Respuesta `200`:** `{ "id": "<uuid>" }` · **Errores:** `400 EMPTY_PATCH`, `404 NOT_FOUND`.

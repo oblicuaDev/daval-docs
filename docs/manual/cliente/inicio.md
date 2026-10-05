@@ -23,7 +23,7 @@ Esta franja te dice si puedes pedir ahora mismo:
 
 ### ¿Hasta cuándo puedo pedir?
 
-Puedes enviar cotizaciones **hasta el día anterior a tu ruta, a la hora de corte**. El día de la ruta la recepción está cerrada, y se vuelve a abrir al día siguiente.
+Cada ruta tiene su propio horario de cierre, que define DAVAL. Lo más común es **hasta el día anterior a tu ruta, a la hora de corte**. El día de la ruta la recepción está cerrada, y se vuelve a abrir al día siguiente. La franja superior siempre muestra el horario vigente para tu sucursal.
 
 **Ejemplo:** tu ruta es el **jueves** con hora de corte **5:00 p. m.**
 

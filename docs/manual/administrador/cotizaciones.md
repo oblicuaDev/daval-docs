@@ -15,6 +15,10 @@ En **Cotizaciones** ves todas las cotizaciones del sistema.
 
 Pulsa **Gestionar** para abrir una.
 
+## Cotizaciones del chatbot
+
+Las cotizaciones que llegan por WhatsApp tienen la etiqueta verde **WhatsApp** junto al código y entran en estado **Pendiente**, para que alguien del equipo las revise antes de seguir. Los precios, la ruta y el asesor los calcula DAVAL igual que en la web; el chatbot no los puede cambiar. El asesor de la sucursal también las ve, con la misma etiqueta.
+
 ## El detalle
 
 Tienes todo lo que ve el asesor (productos, notas del cliente, comentarios, adjuntos, cambio de asesor y link de SIIGO; ver [la guía del asesor](../asesor/panel.md#el-detalle-de-una-cotización)) más el bloque **Integración Siigo**.

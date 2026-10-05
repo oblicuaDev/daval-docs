@@ -13,9 +13,10 @@ Implementado en `api/src/lib/pricing.js` → `resolvePrices({ productIds, priceL
 
 ### 1. Se elige la lista de precios
 
-- Si el usuario es `client`, se usa `clients.price_list_id`.
+- Si el usuario es `client` (o la integración consulta por `clientId`), se usa `clients.price_list_id`. La lista es **por cliente**, no por empresa: dos clientes de la misma empresa pueden tener listas distintas.
 - Si es admin o asesor, se puede pasar `?priceListId=` en `GET /products`.
 - Si no hay lista (o está inactiva), se usa la lista con `is_default = TRUE`.
+- Las listas válidas son las de Daval (`price_lists` + `product_price_lists.price_list_id`). Las filas que la sincronización de SIIGO guarda solo con `price_list_name` no participan en el cálculo.
 
 ### 2. Se calcula el precio de lista
 
@@ -54,31 +55,63 @@ Al crear la cotización, cada ítem guarda `unit_price = finalPrice` y `price_ty
 
 ## Ventana de corte de rutas
 
-Implementado en `api/src/lib/cutoff.js` → `computeRouteCutoff(route)`, siempre en zona `America/Bogota`.
+Implementado en `api/src/lib/cutoff.js` → `computeRouteCutoff(route)`, siempre en zona `America/Bogota`. Es la **única** implementación: la usan la validación de cotizaciones, la consulta del cliente web, la del chatbot y los futuros recordatorios. El frontend no calcula el corte; solo muestra lo que devuelve el servidor.
 
-Cada ruta tiene un día (`Lunes`…`Domingo`) y una hora de corte (`cutoff_time`). El cliente puede enviar cotizaciones **hasta el día anterior a la ruta a la hora de corte**. La recepción se reabre al día siguiente de la ruta.
+### Calendario de la ruta
+
+| Columna (`routes`) | Significado |
+|---|---|
+| `operation_days` | Días en que opera (ISO: 1 = lunes … 7 = domingo). Puede ser más de uno. |
+| `frequency` | `weekly` o `biweekly`. |
+| `anchor_date` | Quincenales: una fecha de una semana en que la ruta opera. Opera esa semana y cada 2 semanas desde ahí. |
+| `cutoff_days_before` | Días antes de la fecha de ruta en que cierra la recepción (0 = mismo día, 1 = día anterior…). |
+| `cutoff_time` | Hora de cierre. |
+
+### Ventana de cada fecha de ruta
+
+Para cada fecha de ruta `D`, con `P` = la fecha de ruta anterior:
 
 ```text
-routeDate    = próxima ocurrencia del día de la ruta (hoy si hoy es el día)
-deadline     = (routeDate − 1 día) a la hora cutoff_time
-nextOpenDate = routeDate + 1 día, 00:00
-isOpen       = ahora <= deadline  ||  ahora >= nextOpenDate
+abre   = P + 1 día, 00:00
+cierra = (D − cutoff_days_before días) a la hora cutoff_time
 ```
 
-### Ejemplo: ruta de jueves con corte 17:00
+En un momento dado, la cotización va a la primera fecha de ruta cuya ventana todavía no cierra:
 
-| Momento | ¿Abierto? |
-|---|---|
-| Lunes 10:00 | Sí |
-| Miércoles 16:59 | Sí |
-| Miércoles 17:01 | **No** |
-| Jueves (día de ruta) | **No** |
-| Viernes 00:00 en adelante | Sí (ya cuenta para el jueves siguiente) |
+```text
+isOpen = ahora >= abre
+```
+
+Si una ventana queda vacía (cierra antes de abrir), esa fecha no recibe cotizaciones y se pasa a la siguiente. Por ejemplo, una ruta que opera lunes **y** martes con cierre el día anterior: la ventana del martes abriría el martes y cerraría el lunes, así que todo va a la ruta del lunes siguiente.
+
+### Ejemplo 1: ruta semanal de jueves, cierre 1 día antes a las 17:00
+
+| Momento | ¿Abierto? | Va a la ruta del |
+|---|---|---|
+| Lunes 10:00 | Sí | jueves de esta semana |
+| Miércoles 16:59 | Sí | jueves de esta semana |
+| Miércoles 17:01 | **No** (reabre el viernes) | jueves siguiente |
+| Jueves (día de ruta) | **No** | jueves siguiente |
+| Viernes 00:00 en adelante | Sí | jueves siguiente |
+
+### Ejemplo 2: ruta de lunes que cierra el viernes a las 17:00
+
+`operation_days = [1]`, `cutoff_days_before = 3`, `cutoff_time = 17:00`. Abierta de martes 00:00 a viernes 17:00; cerrada el fin de semana y el lunes.
+
+### Ejemplo 3: ruta quincenal de miércoles
+
+`operation_days = [3]`, `frequency = biweekly`, `anchor_date = 2026-10-07`, `cutoff_days_before = 2`. Opera el 7 y el 21 de octubre, el 4 de noviembre… La ventana para el 21 abre el 8 de octubre y cierra el lunes 19 a la hora de corte.
+
+### Validación del calendario
+
+`POST/PUT /api/routes` rechazan con `400 INVALID_SCHEDULE` los calendarios inválidos: sin días de operación, quincenal sin `anchor_date` o con una fecha que no es día de operación, o un cierre tan anticipado que ninguna fecha tiene ventana.
 
 ### Dónde se aplica
 
-- `GET /api/routes/me/cutoff` devuelve el estado para el cliente autenticado.
-- `POST /api/quotations` y `POST /api/quotations/:id/clone` usan la ruta **de la sucursal** y responden `422 ROUTE_CLOSED` con `details.nextOpenDate` si está cerrada.
+- **Criterio único: la ruta de la sucursal** (`company_branches.route_id`), nunca `clients.route_id`.
+- `GET /api/routes/me/cutoff` (cliente web) y `GET /api/integrations/cutoff` (chatbot) devuelven el estado.
+- `POST /api/quotations`, `POST /api/quotations/:id/clone` y `POST /api/integrations/quotations` responden `422 ROUTE_CLOSED` con `details.nextOpenDate` y `details.routeDate` si está cerrada.
+- Cada cotización guarda la fecha de ruta a la que va en `quotations.route_date`.
 - Sin ruta asignada: `isOpen: false`, `missingRoute: true`.
 
 ## Alcance por rol
@@ -92,12 +125,26 @@ isOpen       = ahora <= deadline  ||  ahora >= nextOpenDate
 
 Fuera de alcance se responde `404` (no `403`) para no revelar que el recurso existe.
 
+## Clientes
+
+- El **cliente** es la fila de `clients`. Tiene su propia empresa (`company_id`), su sucursal por defecto (`branch_id`) y su lista de precios.
+- Un cliente puede tener **usuario de login** (`clients.user_id`, relación 1:1) o no tenerlo. Los clientes sin login se atienden solo por WhatsApp y se administran desde `/api/clients`.
+- Los teléfonos de WhatsApp están en `contact_phones`, normalizados a E.164. Ver [Identificación por WhatsApp](../api/integraciones-chatbot.md#identificar-un-cliente-por-whatsapp).
+- `quotations.client_id`, `promotion_clients.client_id` y la asignación de listas de precios usan siempre `clients.id`, nunca `users.id`.
+
 ## Asignación de asesor y ruta
 
-- La **sucursal** (`company_branches`) define `route_id` y `advisor_id`.
-- Al crear un usuario cliente con `branchId`, la ficha `clients` hereda `route_id` y `advisor_id` de esa sucursal.
-- Al crear una cotización, `advisor_id` se toma de la sucursal. El cliente nunca lo envía.
+- La **sucursal** (`company_branches`) define `route_id` y `advisor_id`. Es el único criterio para el corte y para el asesor de una cotización.
+- La sucursal debe pertenecer a la empresa del cliente. Si no, se responde `404 BRANCH_NOT_FOUND`.
+- `clients.route_id` y `clients.advisor_id` son copias de la sucursal que se mantienen por compatibilidad (las usa el listado del asesor). No se usan para el corte.
+- Al crear una cotización, `advisor_id` se toma de la sucursal. Ni el cliente ni el chatbot lo envían.
 - En el auto-registro (sin sesión de admin) **no** se aceptan `routeId` ni `advisorId`: los asigna un administrador después.
+
+## Estado y origen de la cotización
+
+- Desde la web, la cotización se crea en estado `sent`. Desde el chatbot, en `pending` para revisión humana.
+- `quotations.source` registra el canal: `web` o `whatsapp`. Para el chatbot lo fija el servidor según la credencial; el body no lo acepta.
+- Solo se pueden cotizar productos activos (`404 PRODUCT_NOT_FOUND` si no).
 
 ## Código de cotización
 

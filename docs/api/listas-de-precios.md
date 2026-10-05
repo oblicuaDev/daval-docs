@@ -27,7 +27,7 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
       "isDefault": false,
       "active": true,
       "scope": "selected",
-      "clientIds": ["<users.id>", "<users.id>"]
+      "clientIds": ["<clients.id>", "<clients.id>"]
     }
   ]
 }
@@ -36,7 +36,7 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
 | Campo | Descripción |
 |---|---|
 | `scope` | `all` si es la lista general (`isDefault`), `selected` si no |
-| `clientIds` | IDs de **usuario** (`users.id`) de los clientes que tienen esta lista asignada |
+| `clientIds` | IDs de **cliente** (`clients.id`, con o sin usuario de login) que tienen esta lista asignada |
 
 ## `POST /api/price-lists`
 
@@ -64,11 +64,11 @@ Define a quién aplica la lista.
 
 | Campo | Tipo | Descripción |
 |---|---|---|
-| `scope` | `all` \| `selected` | `all`: la lista pasa a ser la **lista general** (se desmarca la anterior). No cambia las asignaciones explícitas de ningún cliente. `selected`: se asigna exactamente a `userIds` |
-| `userIds` | uuid[] | IDs de usuario cliente. Con `selected`, los clientes que tenían la lista y no vienen aquí vuelven a la lista general |
+| `scope` | `all` \| `selected` | `all`: la lista pasa a ser la **lista general** (se desmarca la anterior). No cambia las asignaciones explícitas de ningún cliente. `selected`: se asigna exactamente a `clientIds` |
+| `clientIds` | uuid[] | IDs de cliente (`clients.id`). Con `selected`, los clientes que tenían la lista y no vienen aquí vuelven a la lista general |
 
 ```json
-{ "scope": "selected", "userIds": ["0b56…", "db45…"] }
+{ "scope": "selected", "clientIds": ["0b56…", "db45…"] }
 ```
 
 **Respuesta `200`:** `{ "id": "<uuid>", "scope": "selected", "assigned": 2 }` · **Errores:** `404 NOT_FOUND`.

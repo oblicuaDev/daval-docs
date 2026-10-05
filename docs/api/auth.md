@@ -69,7 +69,7 @@ Emite un access token y un refresh token nuevos (rotación). El frontend lo llam
 | HTTP | `error` | Causa |
 |---|---|---|
 | 400 | `MISSING_TOKEN` | No se envió `refreshToken` |
-| 401 | `INVALID_REFRESH_TOKEN` | Firma inválida o vencido |
+| 401 | `INVALID_REFRESH_TOKEN` | Firma inválida, vencido, o la sesión fue revocada (contraseña cambiada o usuario desactivado después de emitirlo) |
 | 401 | `USER_INACTIVE` | El usuario ya no existe o fue desactivado |
 
 ---
@@ -108,7 +108,13 @@ login ──► token (8h) + refreshToken (30d)
    ├─ petición con token ─► 200
    ├─ petición con token vencido ─► 401
    │     └─ frontend: POST /auth/refresh ─► tokens nuevos ─► reintenta la petición
-   └─ refresh vencido o usuario inactivo ─► 401 ─► evento daval:logout ─► /login
+   └─ refresh vencido, revocado o usuario inactivo ─► 401 ─► evento daval:logout ─► /login
 ```
 
 Las duraciones se configuran con `JWT_EXPIRES_IN` y `JWT_REFRESH_EXPIRES_IN`.
+
+### Revocación de sesiones
+
+El refresh token lleva `tv`, la `users.token_version` del momento en que se emitió. Un trigger en la base incrementa `token_version` cuando cambia la contraseña (`password_hash`) o el usuario se desactiva, aunque el cambio se haga directo por SQL. Desde ese momento `POST /auth/refresh` rechaza los refresh tokens anteriores.
+
+El access token ya emitido sigue siendo válido hasta que vence (`JWT_EXPIRES_IN`, 8 h por defecto). Para cortar **todas** las sesiones de inmediato, rota `JWT_SECRET` y `JWT_REFRESH_SECRET`. Ver [Credenciales y seguridad](../guias/credenciales.md).

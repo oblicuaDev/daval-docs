@@ -9,7 +9,7 @@ Archivo: `api/src/routes/apiKeys.js` · Prefijo: `/api/api-keys`
 
 Credenciales para consumidores externos (por ejemplo, el chatbot de WhatsApp) que necesitan usar la API **sin ser un usuario de la plataforma**. A diferencia del login (`POST /auth/login`), un API key:
 
-- No expira por tiempo: dura hasta que se revoca a mano.
+- No expira por tiempo, salvo que se le ponga vencimiento: dura hasta que se revoca o se rota.
 - No tiene rol ni contraseña: solo un `name` y una lista de `scopes`.
 - No identifica a ningún cliente ni asesor: es una credencial de **servicio**, no de una persona.
 
@@ -58,7 +58,8 @@ Lista los API keys (sin el hash ni el valor completo).
       "id": "…", "name": "Chatbot WhatsApp", "keyPrefix": "dvl_xxxxxxxx",
       "scopes": ["clients:read", "prices:read", "cutoff:read", "quotations:write"], "active": true,
       "lastUsedAt": "2026-10-05T18:03:48.826Z",
-      "createdAt": "2026-10-05T18:03:48.496Z", "revokedAt": null
+      "createdAt": "2026-10-05T18:03:48.496Z", "revokedAt": null,
+      "expiresAt": null, "replacedBy": null
     }
   ]
 }
@@ -76,6 +77,7 @@ Genera un API key nuevo.
 |---|---|---|
 | `name` | string | Sí |
 | `scopes` | string[], valores de la lista de arriba | Sí, mínimo 1 |
+| `expiresInDays` | entero 1–730 | No. Sin él, no vence |
 
 ```json
 { "name": "Chatbot WhatsApp", "scopes": ["clients:read", "prices:read", "cutoff:read", "quotations:write"] }
@@ -88,7 +90,8 @@ Genera un API key nuevo.
   "id": "…", "name": "Chatbot WhatsApp",
   "scopes": ["clients:read", "prices:read", "cutoff:read", "quotations:write"],
   "apiKey": "dvl_…",
-  "createdAt": "…"
+  "createdAt": "…",
+  "expiresAt": null
 }
 ```
 
@@ -96,9 +99,45 @@ Genera un API key nuevo.
 Es la única respuesta que lo incluye completo. Si se pierde, hay que revocar este key y generar uno nuevo.
 :::
 
+## `PATCH /api/api-keys/:id`
+
+Cambia `name` y/o `scopes` de un key activo sin cambiar su valor. Sirve para ajustar permisos (mínimo privilegio) sin coordinar un cambio de credencial con el consumidor.
+
+**Acceso:** admin · **Body:** `{ "scopes": ["cutoff:read", "clients:read"] }` · **Respuesta `200`:** el key (sin valor) · **Errores:** `404 NOT_FOUND` si no existe o está revocado.
+
+## `POST /api/api-keys/:id/rotate`
+
+Renueva una credencial **sin cortar el servicio**: emite un key nuevo con el mismo nombre y deja el anterior funcionando durante un periodo de gracia, para que el consumidor cambie al nuevo.
+
+**Acceso:** admin
+
+**Body (todo opcional)**
+
+| Campo | Tipo | Por defecto | Descripción |
+|---|---|---|---|
+| `graceHours` | entero 0–168 | `48` | Horas que el key anterior sigue vivo. `0` lo revoca de inmediato |
+| `scopes` | string[] | los del key anterior | Scopes del key nuevo |
+| `expiresInDays` | entero 1–730 | sin vencimiento | Vencimiento del key nuevo |
+
+**Respuesta `201`**
+
+```json
+{
+  "id": "…", "name": "Chatbot WhatsApp",
+  "scopes": ["clients:read", "prices:read", "cutoff:read", "quotations:write"],
+  "apiKey": "dvl_…",
+  "createdAt": "…", "expiresAt": null,
+  "previous": { "id": "…", "expiresAt": "2026-10-07T21:20:42.796Z" }
+}
+```
+
+El key anterior queda con `replacedBy` apuntando al nuevo. Al vencer, responde `401 API_KEY_EXPIRED`.
+
+**Errores:** `404 NOT_FOUND` (no existe o revocado), `409 API_KEY_EXPIRED` (ya venció: genera uno nuevo con `POST`).
+
 ## `DELETE /api/api-keys/:id`
 
-Revoca el key (`active = false`). No lo borra: conserva el registro para auditoría.
+Revoca el key de inmediato (`active = false`). No lo borra: conserva el registro para auditoría. Úsalo cuando un key quedó expuesto; para una renovación planeada usa `rotate`.
 
 **Acceso:** admin
 
@@ -120,4 +159,6 @@ curl https://<dominio>/api/integrations/cutoff?branchId=<uuid> \
 - **Exclusivos de integraciones** (`/api/integrations/*`, `requireApiKeyScope`): solo aceptan API key. Sin key responden `401 API_KEY_REQUIRED`; con un key sin el scope, `403 INSUFFICIENT_SCOPE`. El login de un usuario no sirve aquí.
 - **Compartidos** (`GET /api/categories`, `requireScopeOrAuth`): aceptan el login normal **o** un key con el scope. Un key sin el scope cae al login normal y termina en `401 INVALID_TOKEN`.
 
-Un key inválido o revocado responde `401 INVALID_API_KEY`.
+Un key inválido o revocado responde `401 INVALID_API_KEY`; uno vencido, `401 API_KEY_EXPIRED`.
+
+Procedimiento completo de entrega, renovación y revocación: [Credenciales y seguridad](../guias/credenciales.md).

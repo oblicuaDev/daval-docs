@@ -31,7 +31,8 @@ Cada consumidor tiene **su propio key** con **solo** los scopes que usa. Ver la 
 |---|---|
 | Chatbot de WhatsApp | `clients:read`, `prices:read`, `cutoff:read`, `quotations:write` (y `catalog:read` solo si consulta categorías) |
 
-- Un key por ambiente: el de pruebas nunca sirve en producción y viceversa, porque cada ambiente tiene su propia base de datos.
+- Un key por ambiente: el de pruebas nunca sirve en producción y viceversa, porque cada ambiente tiene su propia base de datos. Ver [Ambiente de pruebas](./ambiente-de-pruebas.md).
+- Los secretos JWT también son distintos por ambiente: en Preview la API usa `STAGING_JWT_SECRET` y `STAGING_JWT_REFRESH_SECRET` (`api/src/config/environment.js`). Con el mismo secreto, un token de admin de pruebas valdría en producción.
 - Si un consumidor deja de necesitar un scope, quítaselo con `PATCH /api/api-keys/:id`; no hace falta cambiar el key.
 
 ### Entregar un key

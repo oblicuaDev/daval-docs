@@ -11,6 +11,15 @@ Endpoints para que un servicio externo (el chatbot de WhatsApp) identifique clie
 
 **Principio:** el chatbot no decide nada comercial. Lista de precios, promociones, precio final, ruta, asesor y corte los resuelve siempre Daval. El chatbot solo pregunta y transmite.
 
+## Ambientes
+
+| Ambiente | URL base |
+|---|---|
+| Pruebas | `https://daval-app-git-staging-julian-s-projects14.vercel.app/api/integrations` |
+| Producción | `https://daval-app.vercel.app/api/integrations` |
+
+Cada ambiente tiene su propio API key. Datos de prueba y escenarios: [Ambiente de pruebas](../guias/ambiente-de-pruebas.md).
+
 ## Autenticación
 
 Todos los endpoints exigen un [API key de integración](./api-keys.md) en la cabecera `Authorization`, con el scope indicado en cada uno. El login de un usuario no sirve aquí.

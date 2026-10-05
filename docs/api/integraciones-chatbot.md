@@ -184,11 +184,12 @@ Solo se devuelven productos activos.
   "priceList": { "id": "…", "name": "Lista Mayorista" },
   "currency": "COP",
   "computedAt": "2026-10-05T20:59:32.947Z",
+  "catalogSyncedAt": "2026-10-05T10:00:03.120Z",
   "items": [
     {
       "productId": "…", "sku": "PR035", "name": "ACOMETIDA HEMBRA 1/2",
       "unit": "unidad", "category": "Plomería",
-      "stock": 441, "stockSyncedAt": "2026-10-05T06:00:00.000Z",
+      "stock": 441, "stockTracked": true, "stockSyncedAt": "2026-10-05T10:00:05.000Z",
       "priceListPrice": 1950,
       "promotionPrice": 1500,
       "finalPrice": 1500,
@@ -201,7 +202,9 @@ Solo se devuelven productos activos.
 
 - `finalPrice` es el precio a comunicar. El chatbot **no debe** calcular ni redondear precios.
 - `priceType`: `promotion` si aplica una promoción, `price_list` si no.
-- `stock` y `stockSyncedAt`: disponibilidad según la última sincronización con SIIGO. Úsala como referencia e informa la fecha si es antigua.
+- `stock` y `stockSyncedAt`: disponibilidad según la última sincronización con SIIGO. Es una **referencia**, no una reserva.
+- `stockTracked: false`: SIIGO no lleva inventario de ese producto; `stock` no indica disponibilidad y el chatbot no debe afirmarla.
+- `catalogSyncedAt`: última sincronización exitosa con SIIGO. Hoy se sincroniza al menos una vez al día (5:00 a. m. Colombia); si la fecha es de días atrás, el chatbot debe aclarar que la disponibilidad puede haber cambiado. Ver [Sincronización de productos](../integraciones/siigo.md#sincronización-de-productos).
 - `notFound`: SKUs o IDs pedidos que no existen o están inactivos.
 
 **Errores:** `400 MISSING_PARAMS`, `404 CLIENT_NOT_FOUND`.

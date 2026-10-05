@@ -35,22 +35,51 @@ El cliente HTTP (`lib/siigo/client.js`):
 
 ## Sincronización de productos
 
-`services/siigoSync.js`
+`services/siigoSync.js` → `runProductsSync({ mode })`
+
+### Modos
+
+| Modo | Qué trae de SIIGO | Productos que ya no existen en SIIGO |
+|---|---|---|
+| `full` (completa) | Todo el catálogo | Se **desactivan** (`active = false`), solo si el recorrido terminó completo |
+| `incremental` | Solo lo modificado desde la última sync exitosa (`updated_start` de SIIGO, que incluye **cambios de saldo de inventario**) | No se detectan; los detecta la siguiente completa |
+
+Sin una sync exitosa previa, la incremental se ejecuta como completa. SIIGO filtra por **fecha**, así que la incremental pide desde el día anterior (hora Colombia) a la última sync exitosa; los productos repetidos simplemente se vuelven a actualizar.
+
+### Frecuencia
+
+| Ejecución | Cuándo | Modo |
+|---|---|---|
+| Automática (Vercel Cron, `vercel.json`) | Todos los días a las 10:00 UTC (5:00 a. m. Colombia) | `full` |
+| Manual (botón en *Integraciones → SIIGO*) | Cuando el admin lo pida | `full` |
+| `GET /api/cron/siigo-sync?mode=incremental` | Disponible para un programador externo (ver abajo) | `incremental` |
+
+El plan Hobby de Vercel solo permite crons diarios. Para actualizar el stock varias veces al día se necesita un programador externo que llame al endpoint de cron con el secreto (`Authorization: Bearer <CRON_SECRET>`).
+
+**Medición (catálogo de 1 123 productos):** completa ≈ 6 s; incremental de un día (273 productos) ≈ 3,5 s. SIIGO permite 100 peticiones por minuto en producción; una completa usa 12.
+
+### Cómo corre
 
 ```text
-POST /sync/products
-  ├─ si ya hay una corriendo → 409 SYNC_ALREADY_RUNNING
-  ├─ inserta log en siigo_sync_logs (status = running)
-  ├─ marca siigo_settings.last_sync_status = running
-  ├─ responde 202 { logId }
-  └─ en segundo plano:
-       para cada página de GET /v1/products (page_size = 100):
-         para cada producto:
-           mapSiigoProduct() → upsert por siigo_id (transacción por producto)
-       finishSync(success | error, contadores)
+runProductsSync({ mode })
+  ├─ toma el bloqueo (siigo_settings.last_sync_status = running)
+  │    └─ si otra sync corre hace menos de 10 min → 409 SYNC_ALREADY_RUNNING
+  ├─ inserta log en siigo_sync_logs (mode, status = running)
+  ├─ por cada página de GET /v1/products (page_size = 100, reintentos ante 429/errores):
+  │    └─ un solo INSERT … ON CONFLICT (siigo_id) DO UPDATE para los 100 productos
+  │       (si el lote falla, p. ej. por SKU duplicado, reintenta producto por producto)
+  ├─ completa y terminada → desactiva los que no vinieron (salvo que SIIGO devuelva
+  │    menos de la mitad de los activos: se asume respuesta incompleta y no se desactiva nada)
+  └─ cierra el log: success | partial | error
 ```
 
-**Mapeo** (`lib/siigo/mapper.js`):
+La sync se ejecuta **esperando el resultado** (no en segundo plano): en Vercel una función se congela al responder, y por eso las syncs en segundo plano nunca terminaban. Si una ejecución pasa de 240 s se detiene, queda `partial` y la siguiente la completa.
+
+**Bloqueo abandonado:** si una ejecución muere sin cerrar, el bloqueo vence a los 10 minutos. `resetStuckSync()` solo marca como `error` las syncs con más de 10 minutos en `running` (antes reseteaba cualquiera en cada arranque en frío y mataba la que otra instancia estaba corriendo).
+
+**Marcas de tiempo** (`siigo_settings`): `last_full_sync_at` y `last_incremental_sync_at` guardan el **inicio** de la última sync exitosa de cada tipo (lo que cambie en SIIGO durante la sync entra en la siguiente).
+
+### Mapeo (`lib/siigo/mapper.js`)
 
 | SIIGO | Local |
 |---|---|
@@ -59,18 +88,27 @@ POST /sync/products
 | `name` | `name` |
 | `unit.name` / `unit.code` | `unit` |
 | `available_quantity` | `stock` |
+| `stock_control` | `stock_control` (si es `false`, SIIGO no lleva inventario y `stock` no indica disponibilidad) |
 | primer valor de `prices[0].price_list` | `base_price` |
 | `active` | `active` |
 | `metadata.image_url` | `image_url` (solo si viene; no borra la imagen local) |
-| cada `prices[0].price_list[]` | fila en `product_price_lists` (por `price_list_name`) |
+| cada `prices[0].price_list[]` | fila en `product_price_lists` por `price_list_name` (informativa: el precio de venta usa las listas de DAVAL) |
 
-Los campos propios de DAVAL (`category_id`, `quality`, `description`) no se tocan.
+Cada producto guarda `last_sync_at`. Los campos propios de DAVAL (`category_id`, `quality`, `description`) no se tocan.
 
-**Sincronizaciones colgadas:** si el proceso muere a mitad de una sincronización, el estado queda en `running`. `resetStuckSync()` lo pasa a `error` al arrancar el servidor y en la primera petición de cada instancia serverless.
+### Comportamiento por caso
 
-:::caution[Serverless]
-En Vercel la función tiene un límite de 30 s (`vercel.json`). Una sincronización larga que corre "en segundo plano" puede cortarse cuando termina la invocación. Para catálogos grandes, ejecuta la API en un servidor Node persistente (Railway/Render) o mueve la sincronización a una cola.
-:::
+| En SIIGO | En DAVAL |
+|---|---|
+| Producto nuevo | Se crea en la próxima sync (completa o incremental), activo según SIIGO, sin categoría ni calidad |
+| Producto modificado (nombre, precio, unidad, stock) | Se actualiza en la próxima sync |
+| Producto marcado inactivo | `active = false` en la próxima sync: deja de aparecer en el catálogo y no se puede cotizar |
+| Producto eliminado | `active = false` en la próxima sync **completa** |
+| Producto creado solo en DAVAL (sin `siigo_id`) | La sync no lo toca |
+
+### Disponibilidad para el chatbot
+
+`GET /api/integrations/clients/:id/prices` devuelve por producto `stock`, `stockTracked` (`stock_control`) y `stockSyncedAt`, y en la respuesta `catalogSyncedAt` (última sync exitosa). El chatbot no debe afirmar disponibilidad si `stockTracked` es `false`, y debe aclarar la fecha si `catalogSyncedAt` es antigua.
 
 ## Clientes
 

@@ -115,6 +115,7 @@ Estados (`quotation_status`): `draft`, `sent`, `pending`, `approved`, `rejected`
 | `013_api_keys` | `migrations/013_…` | Tabla `api_keys` |
 | `014_chatbot_clients` | `migrations/014_…` | `clients.company_id/branch_id`, email opcional, único en `clients.user_id`, tabla `contact_phones` (con backfill desde `clients.phone`), `quotations.source` y `api_key_id` |
 | `015_route_schedule` | `migrations/015_…` | Calendario de rutas (`operation_days`, `frequency`, `anchor_date`, `cutoff_days_before`, con backfill desde `day`), `quotations.route_date` e `idempotency_key` |
+| `017_siigo_sync_modes` | `migrations/017_…` | Sync completa e incremental: `siigo_sync_logs.mode` e `items_deactivated`, `siigo_settings.last_full_sync_at` / `last_incremental_sync_at`, `products.stock_control` |
 | `016_credential_security` | `migrations/016_…` | `users.token_version` + trigger de revocación de sesiones; `api_keys.expires_at` y `replaced_by` |
 | `seed_002_integration_test` | `seeds/002_integration_test.sql` | Escenarios para probar integraciones (solo con `--seed`). Ver [Ambiente de pruebas](../guias/ambiente-de-pruebas.md) |
 | `seed_001_initial` | `seeds/001_initial.sql` | Datos de desarrollo (solo con `--seed`). Crea usuarios con contraseñas conocidas: `migrate.js` lo rechaza contra una base remota salvo `ALLOW_REMOTE_SEED=1`. **Nunca en producción** |

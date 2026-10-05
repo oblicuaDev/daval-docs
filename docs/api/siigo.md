@@ -76,19 +76,25 @@ Se autentica contra SIIGO y lista un producto como prueba.
 
 ### `POST /api/integrations/siigo/sync/products`
 
-Lanza la sincronización del catálogo **en segundo plano** y responde de inmediato.
+Ejecuta la sincronización del catálogo y **espera a que termine** (unos segundos). Ver [Sincronización de productos](../integraciones/siigo.md#sincronización-de-productos).
 
-**Respuesta `202`**
+**Body (opcional):** `{ "mode": "full" | "incremental" }` (por defecto `full`).
+
+**Respuesta `200`**
 
 ```json
-{ "accepted": true, "logId": "…", "status": "running" }
+{
+  "logId": "…", "mode": "full", "status": "success",
+  "processed": 1123, "created": 0, "updated": 1123, "errors": 0, "deactivated": 2,
+  "message": null, "durationMs": 6200
+}
 ```
+
+`status`: `success`, `partial` (se agotó el tiempo; la siguiente la completa) o `error`.
 
 **Errores:** `409 SYNC_ALREADY_RUNNING`.
 
 ### `GET /api/integrations/siigo/sync/status`
-
-Para hacer *polling* mientras corre la sincronización.
 
 **Respuesta `200`**
 
@@ -96,13 +102,25 @@ Para hacer *polling* mientras corre la sincronización.
 {
   "running": false,
   "last": {
-    "id": "…", "kind": "products", "status": "success",
+    "id": "…", "kind": "products", "mode": "full", "status": "success",
     "started_at": "…", "finished_at": "…",
-    "items_processed": 1840, "items_created": 12, "items_updated": 1828,
+    "items_processed": 1123, "items_created": 0, "items_updated": 1123, "items_deactivated": 2,
     "error_message": null
-  }
+  },
+  "lastFullSyncAt": "…",
+  "lastSuccessfulSyncAt": "…"
 }
 ```
+
+### `GET /api/cron/siigo-sync`
+
+Sync programada. La llama Vercel Cron (diaria, `mode=full`) o un programador externo.
+
+**Acceso:** cabecera `Authorization: Bearer <CRON_SECRET>` (variable de entorno). Sin `CRON_SECRET` configurado responde `503 CRON_NOT_CONFIGURED`; con un secreto incorrecto, `401`.
+
+**Query:** `mode` = `incremental` (por defecto) o `full`.
+
+**Respuesta `200`:** el mismo resumen que `POST /sync/products`, o `{ "skipped": true, "reason": "running" }` si ya había una en curso, o `"staging"` en el ambiente de pruebas.
 
 ### `GET /api/integrations/siigo/sync/logs`
 

@@ -16,15 +16,23 @@ Si todo está bien verás **Conectado como** tu usuario y cuándo expira el toke
 
 ## Sincronizar productos
 
-En **Sincronización de productos** pulsa el botón para sincronizar. La plataforma trae de SIIGO todos los productos con su código, nombre, unidad, stock y precios.
+La plataforma se sincroniza **sola todos los días a las 5:00 a. m.** Trae de SIIGO todos los productos con su código, nombre, unidad, stock y precios, y desactiva los que ya no existen en SIIGO.
 
-- Corre en segundo plano: puedes seguir trabajando. Verás el **Estado** de la última ejecución, cuántos productos se **procesaron**, **crearon** y **actualizaron**.
-- El **Historial** muestra cada ejecución, quién la lanzó y si hubo errores.
+Para sincronizar en otro momento, en **Sincronización de productos** pulsa **Sincronizar ahora**. Tarda unos segundos.
+
+- Verás el **Estado** de la última ejecución, la **última sync exitosa** y la **última completa**.
+- El **Historial** muestra cada ejecución: modo (*Completa* o *Incremental*), cuántos productos se **procesaron**, **crearon**, **actualizaron** y **desactivaron**, quién la lanzó (*Automática* si fue programada) y si hubo errores.
 - No borra lo que completaste en la plataforma (fotos, categoría, calidad, descripción).
 
-:::tip[¿Cada cuánto?]
-Sincroniza cuando agregues productos o cambies precios en SIIGO, y antes de enviar cotizaciones si ves errores de *productos no sincronizados*.
+:::tip[¿Cuándo sincronizar a mano?]
+Cuando crees productos o cambies precios en SIIGO y los necesites antes de la sync de la mañana, y antes de enviar cotizaciones si ves errores de *productos no sincronizados*.
 :::
+
+| Si en SIIGO… | En la plataforma… |
+|---|---|
+| Creas un producto | Aparece en la próxima sincronización, sin categoría ni calidad: complétalas |
+| Cambias nombre, precio o stock | Se actualiza en la próxima sincronización |
+| Inactivas o eliminas un producto | Deja de aparecer en el catálogo y no se puede cotizar |
 
 ## Clientes SIIGO
 

@@ -18,6 +18,7 @@ Nunca pongas aquí, ni en ningún repositorio, ticket o chat, el valor de un API
 | API keys de integración (`dvl_…`) | Hash bcrypt en `api_keys` | Chatbot y otros servicios externos | `POST /api/api-keys/:id/rotate` |
 | `JWT_SECRET`, `JWT_REFRESH_SECRET` | Variables de entorno en Vercel | API (firma de sesiones) | Cambiarlas en Vercel y redesplegar. Cierra todas las sesiones |
 | Contraseñas de usuarios | Hash bcrypt en `users` | Personas | `PUT /api/users/:id` con `password`. Revoca sus refresh tokens |
+| `CRON_SECRET` | Variables de entorno en Vercel (Production) | Vercel Cron y programadores externos de la sync | Cambiarla en Vercel (y en el programador externo, si hay) |
 | `DATABASE_URL` | Variables de entorno en Vercel | API | Restablecer la contraseña en Supabase y actualizar Vercel |
 | Credenciales SIIGO | `siigo_settings` (solo backend) | API | Integraciones → SIIGO en el admin |
 

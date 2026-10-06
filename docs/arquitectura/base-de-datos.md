@@ -84,6 +84,16 @@ El **cliente** es la fila de `clients`, con su propia empresa (`company_id`) y s
 
 Estados (`quotation_status`): `draft`, `sent`, `pending`, `approved`, `rejected`, `synced`, `sent_to_siigo`. Las cotizaciones creadas desde la web nacen en `sent` y las del chatbot en `pending`; el push exitoso a SIIGO las pasa a `synced`.
 
+### Webhooks
+
+| Tabla | Propósito | Columnas clave |
+|---|---|---|
+| `webhook_endpoints` | A dónde y qué eventos enviar | `url`, `secret`, `previous_secret` (gracia de rotación), `events`, `sources`, `active`, `last_success_at`, `last_failure_at` |
+| `webhook_events` | Eventos ocurridos (bandeja de salida) | `type`, `entity_id`, `data` (estado anterior/nuevo, campos cambiados) |
+| `webhook_deliveries` | Un envío por evento y endpoint | `status` (`pending`/`delivered`/`failed`), `attempts`, `next_attempt_at`, `last_status_code`, `last_error`; único `(event_id, endpoint_id)` |
+
+Los eventos los crean **triggers** (`webhook_emit()`) sobre `quotations`, `quotation_comments`, `clients`, `contact_phones`, `company_branches` y `routes`, en la misma transacción del cambio. Si no hay endpoints suscritos, no escriben nada. Ver [Webhooks](../api/webhooks.md).
+
 ### SIIGO
 
 | Tabla | Propósito |
@@ -115,6 +125,7 @@ Estados (`quotation_status`): `draft`, `sent`, `pending`, `approved`, `rejected`
 | `013_api_keys` | `migrations/013_…` | Tabla `api_keys` |
 | `014_chatbot_clients` | `migrations/014_…` | `clients.company_id/branch_id`, email opcional, único en `clients.user_id`, tabla `contact_phones` (con backfill desde `clients.phone`), `quotations.source` y `api_key_id` |
 | `015_route_schedule` | `migrations/015_…` | Calendario de rutas (`operation_days`, `frequency`, `anchor_date`, `cutoff_days_before`, con backfill desde `day`), `quotations.route_date` e `idempotency_key` |
+| `018_webhooks` | `migrations/018_…` | Tablas de webhooks, función `webhook_emit()` y triggers de eventos |
 | `017_siigo_sync_modes` | `migrations/017_…` | Sync completa e incremental: `siigo_sync_logs.mode` e `items_deactivated`, `siigo_settings.last_full_sync_at` / `last_incremental_sync_at`, `products.stock_control` |
 | `016_credential_security` | `migrations/016_…` | `users.token_version` + trigger de revocación de sesiones; `api_keys.expires_at` y `replaced_by` |
 | `seed_002_integration_test` | `seeds/002_integration_test.sql` | Escenarios para probar integraciones (solo con `--seed`). Ver [Ambiente de pruebas](../guias/ambiente-de-pruebas.md) |

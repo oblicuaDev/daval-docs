@@ -98,7 +98,17 @@ curl -X POST "$API/quotations" -H "Authorization: Bearer $KEY" \
 curl "$API/quotations/<id>" -H "Authorization: Bearer $KEY"
 ```
 
-Para probar la actualización de cotizaciones, el equipo de DAVAL puede cambiar el estado de una cotización creada en pruebas (`pending` → `approved` / `rejected`) desde el panel de administración del ambiente de pruebas. El chatbot lo verá con `GET /quotations/:id`.
+### Probar la actualización de cotizaciones y los webhooks
+
+1. DAVAL registra en el ambiente de pruebas el endpoint de pruebas del chatbot (`POST /api/webhooks`, ver [Webhooks](../api/webhooks.md#administración-admin)) y entrega el secreto de firma de **ese ambiente**, distinto del de producción.
+2. El equipo de Boostify verifica la conexión: DAVAL ejecuta `POST /api/webhooks/:id/test` y el chatbot debe recibir un evento `ping` con firma válida.
+3. El chatbot crea una cotización de prueba (paso 4 del flujo anterior) y debe recibir `quotation.created`.
+4. DAVAL cambia el estado de esa cotización en el panel de administración del ambiente de pruebas (`pending` → `approved` o `rejected`) y agrega un comentario: el chatbot debe recibir `quotation.status_changed` (más `quotation.approved` o `quotation.rejected`) y `quotation.comment_added`.
+5. DAVAL edita un teléfono, la sucursal o el calendario de una ruta de prueba: el chatbot recibe `client.updated`, `branch.updated` o `route.updated`.
+
+El chatbot también puede consultar el estado en cualquier momento con `GET /quotations/:id`.
+
+Los ambientes de prueba y producción tienen cada uno sus propios endpoints de webhooks y sus propios secretos de firma.
 
 ## Para el equipo de DAVAL
 
@@ -106,6 +116,7 @@ Para probar la actualización de cotizaciones, el equipo de DAVAL puede cambiar 
 
 - **Código:** rama `staging` de `daval-app`. Cada push despliega en Vercel como *Preview* en la URL de arriba.
 - **Base de datos:** Neon, instalada desde el Marketplace de Vercel con el prefijo `STAGING_`, solo para Preview.
+- **Webhooks:** funcionan igual que en producción, hacia los endpoints registrados en la base de pruebas. La entrega se procesa después de cada cambio (`waitUntil`); el cron de respaldo del ambiente de pruebas no corre porque `CRON_SECRET` solo existe en Production.
 - **Aislamiento:** `api/src/config/environment.js`. Con `VERCEL_ENV=preview` la API usa `STAGING_DATABASE_URL` y los secretos `STAGING_JWT_SECRET` / `STAGING_JWT_REFRESH_SECRET` (definidos solo para la rama `staging`), y deshabilita correos y subida de archivos. Si falta alguna de esas variables, la API no arranca: nunca cae a la base de producción. Un preview de cualquier otra rama no arranca por la misma razón.
 - **Usuarios web de pruebas:** los del seed (`admin@daval.com`, `asesor@daval.com`, `cliente@daval.com`) con contraseñas aleatorias, distintas de las del seed, que guarda el administrador.
 

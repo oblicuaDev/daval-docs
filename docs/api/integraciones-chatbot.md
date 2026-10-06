@@ -46,6 +46,8 @@ Authorization: Bearer dvl_…
 6. GET  /quotations/:id                  → consultar el estado después
 ```
 
+En lugar de consultar el estado de las cotizaciones y los datos del cliente una y otra vez, el chatbot puede **suscribirse a [webhooks](./webhooks.md)**: DAVAL le avisa cuando una cotización cambia de estado (aprobada, rechazada, enviada a SIIGO), cuando el equipo comenta, o cuando cambian los datos, la ruta o los teléfonos de un cliente.
+
 ---
 
 ## Identificar un cliente por WhatsApp
@@ -292,3 +294,5 @@ El body **no acepta** precios, asesor, ruta, lista de precios, estado ni origen:
 Devuelve la cotización con el mismo formato de la creación. Solo se pueden consultar las cotizaciones **creadas con el mismo API key**; cualquier otra responde `404 NOT_FOUND`.
 
 **Estados posibles:** `pending` (en revisión), `sent`, `approved`, `rejected`, `sent_to_siigo`, `synced`, `draft`.
+
+Para enterarse de los cambios sin consultar, usa los eventos `quotation.status_changed`, `quotation.approved` y `quotation.rejected` de los [webhooks](./webhooks.md).

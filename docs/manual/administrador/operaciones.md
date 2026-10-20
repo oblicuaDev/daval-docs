@@ -61,15 +61,15 @@ Un cliente puede entrar a la plataforma web o atenderse **solo por WhatsApp**, a
 
 1. Pulsa **Nuevo Cliente**.
 2. Marca **Acceso a la plataforma web** si el cliente va a entrar a la web. Si no lo marcas, el cliente es *Solo WhatsApp* y no necesita email ni contraseña.
-3. Elige **Empresa** y **Sucursal**. El cliente hereda la **ruta** y el **asesor** de esa sucursal.
-4. Escribe el nombre (usuario o razón social). Con acceso web, también **email** y **contraseña**.
+3. Elige **Empresa** y **Sucursal**. El cliente hereda la **ruta** y el **asesor** de esa sucursal. Si la sucursal aún no tiene ruta o asesor, asígnalos ahí mismo en **Ruta** y **Asesor**: se guardan en la sucursal y aplican a todos sus clientes. Sin ruta el cliente no puede cotizar. Si no hay rutas creadas, créalas primero en **Rutas**.
+4. Escribe el nombre (usuario o razón social) y el **NIT / Cédula** (obligatorio). Con acceso web, también **email** y **contraseña**.
 5. Elige su **lista de precios** (o *Lista general*). La lista es de cada cliente: dos clientes de la misma empresa pueden tener listas distintas.
 6. Agrega sus **teléfonos WhatsApp** (ver abajo).
 7. Guarda.
 
 Si tiene acceso web, comunícale su correo y contraseña. Su asesor recibe el aviso *"Nuevo cliente asignado"*.
 
-Para cambiar la empresa, la sucursal, la lista de precios, los teléfonos o desactivar a un cliente, usa el lápiz de su fila.
+Para cambiar el NIT, la empresa, la sucursal (y su ruta o asesor), la lista de precios, los teléfonos o desactivar a un cliente, usa el lápiz de su fila. La tabla marca en amarillo los clientes **Sin NIT** o **Sin ruta**.
 
 ### Teléfonos WhatsApp
 

@@ -119,7 +119,10 @@ Actualiza la sucursal. Mismos campos, opcionales.
 La actualización usa `COALESCE`, así que enviar `routeId: null` o `advisorId: null` **no** quita la ruta ni el asesor.
 :::
 
-**Efecto secundario:** si `advisorId` cambia a un asesor distinto, se envían los mismos dos correos de asignación.
+**Efectos secundarios:**
+
+- Si se envía `routeId` o `advisorId`, se actualizan las copias `route_id`/`advisor_id` de todos los clientes de la sucursal.
+- Si `advisorId` cambia a un asesor distinto, se envían los mismos dos correos de asignación.
 
 **Respuesta `200`:** `{ "id": "<uuid>" }` · **Errores:** `404 NOT_FOUND` si la sucursal no pertenece a la empresa.
 

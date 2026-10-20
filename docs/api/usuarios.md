@@ -63,13 +63,14 @@ Crea un usuario.
 | `companyId` | uuid \| null | No | Debe existir y estar activa |
 | `branchId` | uuid \| null | No | Debe existir, estar activa y pertenecer a `companyId` |
 | `priceListId` | uuid \| null | No | Solo clientes; debe existir y estar activa |
+| `nit` | string (máx. 20) \| null | No | Solo clientes; único en `clients`. Por defecto el NIT de la empresa si está libre, o un placeholder `NIT-xxxxxxxx` |
 | `siigoSellerId` | entero > 0 \| null | No | Solo asesores (ID de vendedor en SIIGO) |
 | `active` | boolean | No | Por defecto `true` |
 
 **Proceso para rol `client`**
 
 1. Valida empresa, sucursal y lista de precios.
-2. En una transacción crea el usuario y la ficha `clients`, con su empresa y sucursal, que hereda **ruta y asesor de la sucursal** y usa el NIT de la empresa (o un placeholder `NIT-xxxxxxxx`).
+2. En una transacción crea el usuario y la ficha `clients`, con su empresa y sucursal, que hereda **ruta y asesor de la sucursal** y usa el `nit` indicado, o el NIT de la empresa (o un placeholder `NIT-xxxxxxxx`).
 3. Después de responder, envía "Nuevo cliente asignado" al asesor de la sucursal y "Nuevo registro: Cliente" al administrador.
 
 **Respuesta `201`:** `{ "id": "<users.id>", "clientId": "<clients.id>" }`. `clientId` es `null` si el rol no es `client`.
@@ -85,6 +86,7 @@ Para crear un cliente **sin** usuario de login (solo WhatsApp), usa [`POST /api/
 | 403 | `FORBIDDEN` | Auto-registro con un rol distinto de `client` |
 | 404 | `COMPANY_NOT_FOUND` / `BRANCH_NOT_FOUND` / `PRICE_LIST_NOT_FOUND` | Referencia inválida o inactiva |
 | 409 | `DUPLICATE_EMAIL` | Email ya registrado |
+| 409 | `DUPLICATE_NIT` | Ya existe un cliente con ese NIT |
 
 ---
 

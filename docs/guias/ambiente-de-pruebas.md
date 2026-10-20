@@ -80,6 +80,8 @@ KEY=<API key de pruebas>
 
 # 1. Identificar
 curl "$API/clients/lookup?phone=%2B573000000001" -H "Authorization: Bearer $KEY"
+# …o por NIT: Cliente Pruebas Uno (su NIT) y Compartido A (NIT de la empresa)
+curl "$API/clients/lookup?nit=900.000.001-1" -H "Authorization: Bearer $KEY"
 
 # 2. Ventana de corte
 curl "$API/cutoff?clientId=77777777-0002-0000-0000-000000000001&branchId=66666666-0003-0000-0000-000000000001" \

@@ -39,6 +39,7 @@ Authorization: Bearer dvl_…
 ```text
 1. Llega un mensaje de WhatsApp
 2. GET  /clients/lookup?phone=…          → ¿quién es? (cliente, empresa, sucursales)
+   └─ o ?nit=… si el cliente da su NIT / cédula
    └─ needsDisambiguation = true          → preguntar empresa / sucursal
 3. GET  /cutoff?clientId=…&branchId=…    → ¿puede cotizar ahora? ¿para qué fecha?
 4. GET  /clients/:clientId/prices?…      → precios para los productos que pide
@@ -50,13 +51,16 @@ En lugar de consultar el estado de las cotizaciones y los datos del cliente una 
 
 ---
 
-## Identificar un cliente por WhatsApp
+## Identificar un cliente
 
-### `GET /api/integrations/clients/lookup?phone=`
+### `GET /api/integrations/clients/lookup?phone=` · `?nit=`
 
 **Scope:** `clients:read`
 
-Busca el número en los teléfonos de contacto de los clientes.
+Envía **uno** de los dos parámetros (los dos, o ninguno → `400 INVALID_LOOKUP`):
+
+- `phone`: busca el número en los teléfonos de contacto de los clientes.
+- `nit`: busca el NIT o la cédula del cliente, o el NIT de su empresa (ver abajo).
 
 **Cómo se compara el teléfono.** Daval guarda los números en formato **E.164** (`+573001234567`) y compara por **igualdad exacta** después de normalizar lo recibido:
 
@@ -69,6 +73,18 @@ Busca el número en los teléfonos de contacto de los clientes.
 
 Se recomienda enviar el número tal como lo entrega WhatsApp, con código de país (`+57…` o `57…`).
 
+**Cómo se compara el NIT.** Se comparan solo los dígitos, así que da igual si viene con puntos, guion o espacios, y con o sin dígito de verificación:
+
+| Guardado | Coincide con |
+|---|---|
+| `901.234.567-1` | `901.234.567-1`, `901234567-1`, `9012345671`, `901234567` |
+| `52.345.678` (cédula) | `52.345.678`, `52345678` |
+
+- Se busca en el NIT del **cliente** y en el de su **empresa**. Si coincide el de la empresa se devuelven **todos** sus clientes activos, así que normalmente habrá que preguntar con cuál continuar.
+- Cada coincidencia trae `matchedBy`: `client` (su NIT o cédula), `company` (el NIT de la empresa) o `phone`. Las de `client` van primero.
+- Los clientes sin NIT real (`clientNit: null`) solo se encuentran por la empresa o el teléfono.
+- Menos de 5 o más de 15 dígitos → `400 INVALID_NIT`.
+
 **Respuesta `200`**
 
 ```json
@@ -80,6 +96,8 @@ Se recomienda enviar el número tal como lo entrega WhatsApp, con código de pa�
     {
       "clientId": "…",
       "clientName": "Ferretería El Tornillo",
+      "clientNit": "52.345.678",
+      "matchedBy": "phone",
       "company": { "id": "…", "name": "Ferretería El Tornillo S.A.S.", "nit": "900123456-7" },
       "defaultBranchId": "…",
       "branches": [
@@ -101,8 +119,10 @@ Se recomienda enviar el número tal como lo entrega WhatsApp, con código de pa�
 }
 ```
 
-- **Sin coincidencias:** `200` con `matchCount: 0` y `matches: []`. El número no está registrado; el chatbot debe derivar a un asesor.
-- **`needsDisambiguation: true`:** el número pertenece a más de un cliente (varias empresas), o la empresa tiene más de una sucursal. El chatbot debe preguntar con qué empresa y sucursal continuar. `isDefault` marca la sucursal habitual del cliente y sirve para sugerirla.
+Con `?nit=` la respuesta trae `"nit": "<solo dígitos>"` en lugar de `phone`.
+
+- **Sin coincidencias:** `200` con `matchCount: 0` y `matches: []`. El número o NIT no está registrado; el chatbot debe derivar a un asesor.
+- **`needsDisambiguation: true`:** el número o NIT corresponde a más de un cliente, o la empresa tiene más de una sucursal. El chatbot debe preguntar con qué empresa y sucursal continuar. `isDefault` marca la sucursal habitual del cliente y sirve para sugerirla.
 - Solo se devuelven clientes, empresas y sucursales activos.
 
 ---

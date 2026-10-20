@@ -30,7 +30,7 @@ Cada credencial debe tener **solo** los scopes que necesita (mínimo privilegio)
 | Scope | Habilita |
 |---|---|
 | `catalog:read` | `GET /api/categories` |
-| `clients:read` | `GET /api/integrations/clients/lookup`: identificar clientes por WhatsApp |
+| `clients:read` | `GET /api/integrations/clients/lookup`: identificar clientes por WhatsApp o NIT |
 | `prices:read` | `GET /api/integrations/clients/:clientId/prices`: precios por cliente |
 | `cutoff:read` | `GET /api/integrations/cutoff`: ventana de corte |
 | `quotations:write` | `POST /api/integrations/quotations` y `GET /api/integrations/quotations/:id` (solo las creadas con el mismo key) |

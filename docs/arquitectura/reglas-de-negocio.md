@@ -129,7 +129,7 @@ Fuera de alcance se responde `404` (no `403`) para no revelar que el recurso exi
 
 - El **cliente** es la fila de `clients`. Tiene su propia empresa (`company_id`), su sucursal por defecto (`branch_id`) y su lista de precios.
 - Un cliente puede tener **usuario de login** (`clients.user_id`, relación 1:1) o no tenerlo. Los clientes sin login se atienden solo por WhatsApp y se administran desde `/api/clients`.
-- Los teléfonos de WhatsApp están en `contact_phones`, normalizados a E.164. Ver [Identificación por WhatsApp](../api/integraciones-chatbot.md#identificar-un-cliente-por-whatsapp).
+- Los teléfonos de WhatsApp están en `contact_phones`, normalizados a E.164. El chatbot identifica al cliente por teléfono o por NIT. Ver [Identificar un cliente](../api/integraciones-chatbot.md#identificar-un-cliente).
 - `quotations.client_id`, `promotion_clients.client_id` y la asignación de listas de precios usan siempre `clients.id`, nunca `users.id`.
 
 ## Asignación de asesor y ruta

@@ -11,6 +11,8 @@ Al entrar verás:
 - **Una franja de color** con el estado de tu ruta.
 - **Dos opciones** para empezar tu pedido.
 
+![Inicio del cliente con la recepción abierta](/img/manual/cliente/inicio.png)
+
 ## La franja de tu ruta
 
 Esta franja te dice si puedes pedir ahora mismo:
@@ -33,6 +35,8 @@ Cada ruta tiene su propio horario de cierre, que define DAVAL. Lo más común es
 | Miércoles después de las 5:00 p. m. | ❌ No |
 | Jueves (día de la ruta) | ❌ No |
 | Desde el viernes | ✅ Sí, llega en la ruta del jueves siguiente |
+
+![Inicio del cliente con la recepción cerrada](/img/manual/cliente/inicio-cerrado.png)
 
 :::tip
 Si la recepción está cerrada, los botones para empezar un pedido aparecen deshabilitados y verás un mensaje explicando cuándo reabre. Aun así puedes navegar el catálogo y revisar tus cotizaciones.

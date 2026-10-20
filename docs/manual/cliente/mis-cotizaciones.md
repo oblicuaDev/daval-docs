@@ -7,6 +7,8 @@ title: Mis cotizaciones
 
 En **Cotizaciones** ves todas las que has enviado, de la más reciente a la más antigua, con su código, sucursal, fecha, número de ítems, total y estado. Pulsa **Ver detalle** para abrir una.
 
+![Mis cotizaciones](/img/manual/cliente/cotizaciones.png)
+
 ## Estados
 
 | Estado | Qué significa |
@@ -26,6 +28,8 @@ En **Cotizaciones** ves todas las que has enviado, de la más reciente a la más
 - **Mis notas:** las instrucciones que escribiste al enviarla.
 - **Comentarios de la cotización:** mensajes de tu asesor o de DAVAL.
 - **Adjuntos:** archivos relacionados, si los hay.
+
+![Detalle de una cotización](/img/manual/cliente/cotizacion-detalle.png)
 
 :::note[Aviso de precios desactualizados]
 Si ves *"Los precios de esta cotización pueden estar desactualizados"*, significa que algún producto cambió después de que la enviaste. La cotización conserva los precios originales; si necesitas precios actuales, genera una nueva.

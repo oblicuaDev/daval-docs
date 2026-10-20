@@ -7,6 +7,8 @@ title: Catálogo y carrito
 
 ## Buscar productos
 
+![Catálogo de productos](/img/manual/cliente/catalogo.png)
+
 En **Catálogo** puedes encontrar productos de varias formas:
 
 - **Buscador** (arriba): escribe el nombre o el código (SKU) del producto.

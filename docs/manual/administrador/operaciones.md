@@ -9,6 +9,8 @@ title: Rutas, empresas y usuarios
 
 Una ruta es el recorrido de entrega. Su calendario determina **qué días** se entrega y **hasta cuándo** pueden pedir los clientes, tanto en la web como por WhatsApp.
 
+![Lista de rutas](/img/manual/admin/rutas.png)
+
 1. Pulsa **Nueva Ruta**.
 2. Completa:
    - **Nombre de la ruta** (por ejemplo, *Ruta Norte Empresarial*)
@@ -22,6 +24,8 @@ Una ruta es el recorrido de entrega. Su calendario determina **qué días** se e
 3. Guarda.
 
 La tarjeta **Regla de recepción** te describe el calendario mientras lo configuras, por ejemplo: *"La ruta opera Lunes cada dos semanas. Los clientes pueden cotizar hasta 3 días antes de la ruta a las 17:00; la recepción reabre el día siguiente a cada ruta."*
+
+![Formulario Nueva Ruta](/img/manual/admin/ruta-nueva.png)
 
 **Ejemplos**
 
@@ -41,6 +45,8 @@ Al eliminar una ruta, deja de estar disponible pero no se borra su historial.
 
 La **empresa** es el cliente (con su NIT). Cada **sucursal** es un punto de entrega y es la que define **ruta** y **asesor**.
 
+![Empresas con sus sucursales, ruta y asesor](/img/manual/admin/empresas.png)
+
 **Crear una empresa:** **Nueva Empresa** → nombre, NIT, email, teléfono y dirección principal.
 
 **Agregar una sucursal:** dentro de la empresa, **Agregar sucursal** → nombre, ciudad, dirección, **Ruta relacionada** y **Asesor asignado**.
@@ -59,6 +65,8 @@ Usa el buscador para encontrar empresas por nombre, NIT, email o sucursal. Las e
 
 Un cliente puede entrar a la plataforma web o atenderse **solo por WhatsApp**, a través del chatbot.
 
+![Lista de clientes](/img/manual/admin/clientes.png)
+
 1. Pulsa **Nuevo Cliente**.
 2. Marca **Acceso a la plataforma web** si el cliente va a entrar a la web. Si no lo marcas, el cliente es *Solo WhatsApp* y no necesita email ni contraseña.
 3. Elige **Empresa** y **Sucursal**. El cliente hereda la **ruta** y el **asesor** de esa sucursal. Si la sucursal aún no tiene ruta o asesor, asígnalos ahí mismo en **Ruta** y **Asesor**: se guardan en la sucursal y aplican a todos sus clientes. Sin ruta el cliente no puede cotizar. Si no hay rutas creadas, créalas primero en **Rutas**.
@@ -66,6 +74,8 @@ Un cliente puede entrar a la plataforma web o atenderse **solo por WhatsApp**, a
 5. Elige su **lista de precios** (o *Lista general*). La lista es de cada cliente: dos clientes de la misma empresa pueden tener listas distintas.
 6. Agrega sus **teléfonos WhatsApp** (ver abajo).
 7. Guarda.
+
+![Formulario Nuevo Cliente: sucursal sin ruta ni asesor, NIT obligatorio](/img/manual/admin/cliente-nuevo.png)
 
 Si tiene acceso web, comunícale su correo y contraseña. Su asesor recibe el aviso *"Nuevo cliente asignado"*.
 
@@ -81,6 +91,8 @@ El chatbot reconoce al cliente **por estos números**. Si el número con el que 
 - Un mismo número puede estar en clientes de distintas empresas. En ese caso el chatbot le pregunta al cliente con cuál empresa quiere seguir.
 
 ## Asesores
+
+![Lista de asesores](/img/manual/admin/asesores.png)
 
 1. Pulsa **Nuevo Asesor** → nombre completo, email y contraseña.
 2. En la lista, usa **Asignar vendedor SIIGO** para elegir a qué vendedor de SIIGO corresponde.

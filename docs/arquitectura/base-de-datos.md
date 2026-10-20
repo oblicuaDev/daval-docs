@@ -128,6 +128,7 @@ Los eventos los crean **triggers** (`webhook_emit()`) sobre `quotations`, `quota
 | `018_webhooks` | `migrations/018_…` | Tablas de webhooks, función `webhook_emit()` y triggers de eventos |
 | `017_siigo_sync_modes` | `migrations/017_…` | Sync completa e incremental: `siigo_sync_logs.mode` e `items_deactivated`, `siigo_settings.last_full_sync_at` / `last_incremental_sync_at`, `products.stock_control` |
 | `016_credential_security` | `migrations/016_…` | `users.token_version` + trigger de revocación de sesiones; `api_keys.expires_at` y `replaced_by` |
+| `seed_003_qa_demo` | `seeds/003_qa_demo.sql` | Datos de QA/demo para recorrer todas las pantallas y estados (solo con `--seed`). Usuarios con contraseñas conocidas: `migrate.js` lo aplica **solo contra localhost**, ni siquiera con `ALLOW_REMOTE_SEED=1`. Ver [Instalación local](../guias/instalacion-local.md#datos-de-qa-solo-base-local) |
 | `seed_002_integration_test` | `seeds/002_integration_test.sql` | Escenarios para probar integraciones (solo con `--seed`). Ver [Ambiente de pruebas](../guias/ambiente-de-pruebas.md) |
 | `seed_001_initial` | `seeds/001_initial.sql` | Datos de desarrollo (solo con `--seed`). Crea usuarios con contraseñas conocidas: `migrate.js` lo rechaza contra una base remota salvo `ALLOW_REMOTE_SEED=1`. **Nunca en producción** |
 

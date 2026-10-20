@@ -9,6 +9,8 @@ En **Cotizaciones** ves todas las cotizaciones del sistema.
 
 ## Filtros
 
+![Lista de cotizaciones con filtros](/img/manual/admin/cotizaciones.png)
+
 - **Buscar** por código o nombre del cliente.
 - **Estado:** Enviada, Aprobada, Rechazada, Sincronizada, Borrador.
 - **Todas / Pendientes SIIGO / Sincronizadas:** para encontrar rápido las que faltan por pasar a contabilidad.
@@ -22,6 +24,8 @@ Las cotizaciones que llegan por WhatsApp tienen la etiqueta verde **WhatsApp** j
 ## El detalle
 
 Tienes todo lo que ve el asesor (productos, notas del cliente, comentarios, adjuntos, cambio de asesor y link de SIIGO; ver [la guía del asesor](../asesor/panel.md#el-detalle-de-una-cotización)) más el bloque **Integración Siigo**.
+
+![Detalle de una cotización](/img/manual/admin/cotizacion-detalle.png)
 
 ## Enviar una cotización a SIIGO
 

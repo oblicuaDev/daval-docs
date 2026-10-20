@@ -9,6 +9,8 @@ title: Integración con SIIGO
 
 En **Integraciones → Configuración**:
 
+![Configuración y sincronización de SIIGO](/img/manual/admin/integraciones.png)
+
 1. Escribe el **Username** y el **Access key** de la API de SIIGO (se obtienen en el portal de SIIGO). **Partner ID** y **Base URL** normalmente no se cambian.
 2. Guarda y prueba la conexión.
 
@@ -37,6 +39,8 @@ Cuando crees productos o cambies precios en SIIGO y los necesites antes de la sy
 ## Clientes SIIGO
 
 *Sincronización bidireccional de empresas.*
+
+![Importar clientes desde SIIGO (datos ocultos)](/img/manual/admin/clientes-siigo.png)
 
 ### Traer empresas desde SIIGO
 

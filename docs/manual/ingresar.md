@@ -7,6 +7,8 @@ title: Ingresar y registrarse
 
 ## Iniciar sesión
 
+![Pantalla de inicio de sesión](/img/manual/general/login.png)
+
 1. Abre la plataforma. Verás la pantalla **Iniciar sesión**.
 2. Escribe tu **correo electrónico** y tu **contraseña**.
 3. Pulsa **Iniciar sesión**.
@@ -24,6 +26,8 @@ Por ahora la plataforma no tiene opción de "recuperar contraseña". Pide a tu a
 ## Registrarte como cliente nuevo
 
 Si tu empresa todavía no tiene cuenta, puedes crearla tú mismo:
+
+![Formulario de registro de cliente](/img/manual/general/registro.png)
 
 1. En la pantalla de inicio de sesión, pulsa **Registrarme como cliente**.
 2. Completa los tres pasos:

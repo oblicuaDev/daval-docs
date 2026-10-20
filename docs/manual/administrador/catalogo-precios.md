@@ -23,9 +23,13 @@ El cliente siempre ve el precio final; no tiene que hacer cuentas.
 
 **Nueva Categoría** → nombre, descripción y si está activa. Los clientes filtran el catálogo por categoría.
 
+![Categorías](/img/manual/admin/categorias.png)
+
 ## Productos
 
 La mayoría de productos llegan desde SIIGO con la [sincronización](./siigo.md#sincronizar-productos) (nombre, código, unidad, stock y precio base). Desde **Productos** completas lo que SIIGO no tiene:
+
+![Productos](/img/manual/admin/productos.png)
 
 - **Imagen del producto** (JPG, PNG, WebP o GIF, máximo 5 MB)
 - **Categoría** y **Calidad de producto** (estándar, alta o premium)
@@ -42,6 +46,8 @@ El botón **Importar Excel** es una demostración y todavía no procesa archivos
 ## Listas de precios
 
 *Crea listas por archivo y asigna su cobertura comercial.*
+
+![Listas de precios](/img/manual/admin/listas-precios.png)
 
 1. Pulsa **Descargar plantilla** para obtener el formato.
 2. Llena el archivo con tres columnas: **SKU**, **Nombre producto**, **Precio** (solo números, sin puntos ni comas).
@@ -63,6 +69,8 @@ Desmárcalo en *Clientes seleccionados* y guarda. Ese cliente pasa a usar la lis
 ## Promociones
 
 *Crea precios promocionales por archivo con vigencia definida.*
+
+![Promociones](/img/manual/admin/promociones.png)
 
 1. Pulsa **Nueva promoción** y escribe el nombre (por ejemplo, *Promoción Abril Ferreterías*).
 2. **Tipo de promoción:**

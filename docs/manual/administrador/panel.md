@@ -26,6 +26,8 @@ title: Panel y menú
 
 *Resumen general del sistema comercial.*
 
+![Dashboard del administrador](/img/manual/admin/dashboard.png)
+
 - **Indicadores:** total de cotizaciones, sincronizadas en SIIGO, **pendientes SIIGO**, total de productos y de clientes activos.
 - **Top 10 Productos** por ingresos (con botón **Exportar CSV**).
 - **Top 10 Clientes más activos** por ingresos.

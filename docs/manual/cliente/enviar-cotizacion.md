@@ -12,6 +12,8 @@ title: Enviar la cotización
    - **Notas o instrucciones especiales** (opcional): por ejemplo *"entregar en horario de mañana"* o *"facturar a nombre de…"*.
 3. Pulsa el botón para enviar.
 
+![Pantalla Confirmar Cotización](/img/manual/cliente/carrito.png)
+
 Si todo sale bien verás **¡Cotización enviada!** con dos opciones: **Ver mis cotizaciones** o **Seguir comprando**. Tu carrito queda vacío.
 
 ## ¿Qué pasa después?

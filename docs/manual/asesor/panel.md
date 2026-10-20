@@ -11,6 +11,8 @@ Como asesor comercial, tu menú lateral tiene tres opciones: **Mis Cotizaciones*
 
 Es tu pantalla principal (*Cotizaciones Asignadas*). Arriba tienes un resumen:
 
+![Cotizaciones asignadas al asesor](/img/manual/asesor/cotizaciones.png)
+
 - **Total cotizaciones** y **Cotizaciones en Siigo** del periodo.
 - **Top 10 Productos:** lo que más venden tus clientes, por ingresos.
 - **Histórico de Consumos:** monto total por mes de los últimos 12 meses.
@@ -26,6 +28,8 @@ Cuando un cliente envía una cotización, se asigna automáticamente al asesor d
 ## El detalle de una cotización
 
 Aquí trabajas cada pedido:
+
+![Detalle de cotización para el asesor](/img/manual/asesor/cotizacion-detalle.png)
 
 | Sección | Qué puedes hacer |
 |---|---|
@@ -47,11 +51,15 @@ El envío de la cotización a SIIGO lo hace el administrador. Cuando se envía, 
 
 Lista de tus clientes con su empresa y sucursal, lista de precios, ruta, número de cotizaciones y fecha de registro. Busca por **nombre o email**.
 
+![Mis Clientes](/img/manual/asesor/clientes.png)
+
 Pulsa un cliente para ver su **Historial de cotizaciones**: código, fecha, ítems, total y estado de cada una. Útil antes de llamarlo o visitarlo.
 
 ## Mis Empresas
 
 Empresas que tienen al menos una sucursal asignada a ti. Busca por **nombre o NIT**. En cada empresa ves **Mis sucursales** (las que te corresponden), cuántos clientes y cotizaciones tiene y el total vendido.
+
+![Mis Empresas](/img/manual/asesor/empresas.png)
 
 ## Correos que vas a recibir
 

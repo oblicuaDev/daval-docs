@@ -7,6 +7,8 @@ title: Administrar mi empresa
 
 En **Cuenta** (ícono de usuario, arriba) encuentras **Administrar empresa**. Aquí gestionas quién de tu empresa usa la plataforma y dónde se entregan los pedidos.
 
+![Administrar mi empresa](/img/manual/cliente/mi-empresa.png)
+
 ## Usuarios
 
 *Usuarios con acceso al portal de tu empresa.*

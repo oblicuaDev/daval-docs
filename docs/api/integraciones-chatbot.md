@@ -43,7 +43,8 @@ Authorization: Bearer dvl_…
    └─ needsDisambiguation = true          → preguntar empresa / sucursal
 3. GET  /cutoff?clientId=…&branchId=…    → ¿puede cotizar ahora? ¿para qué fecha?
 4. GET  /clients/:clientId/prices?…      → precios para los productos que pide
-5. POST /quotations  (Idempotency-Key)   → crea la cotización en estado "pending"
+5. POST /quotations  (Idempotency-Key)   → crea la cotización aprobada y la envía a SIIGO;
+                                            la respuesta trae siigo.url para mandarla al cliente
 6. GET  /quotations/:id                  → consultar el estado después
 ```
 
@@ -239,7 +240,9 @@ Solo se devuelven productos activos.
 
 **Scope:** `quotations:write`
 
-Crea la cotización en nombre del cliente, en estado **`pending`** (queda para revisión humana) y con origen **`whatsapp`**.
+Crea la cotización en nombre del cliente, **aprobada** y con origen **`whatsapp`**, y en la misma petición la envía a SIIGO. Si SIIGO la acepta, la respuesta llega en estado `synced` con `siigo.url`: el enlace público de la cotización, listo para mandárselo al cliente por WhatsApp. La petición tarda unos segundos más por el envío a SIIGO.
+
+Si SIIGO falla (cliente sin NIT o que no existe en SIIGO, producto sin sincronizar, SIIGO caído…), la cotización **igual se crea**: responde `201` en estado `approved`, con `siigo.url` en `null` y `siigo.error` (`code` y `message`). El equipo de DAVAL la reenvía desde el panel; cuando quede en SIIGO llega el webhook `quotation.status_changed` a `synced` con el enlace. Repetir la petición con la misma `Idempotency-Key` también reintenta el envío.
 
 **Cabecera obligatoria: `Idempotency-Key`.** Es un identificador único del pedido, de hasta 100 caracteres (por ejemplo, el ID del mensaje de WhatsApp). Si la petición se repite con la misma key, por un reintento o un timeout, Daval **no crea otra cotización**: responde `200` con la ya creada y `replayed: true`.
 
@@ -277,7 +280,7 @@ El body **no acepta** precios, asesor, ruta, lista de precios, estado ni origen:
 {
   "id": "…",
   "code": "COT-000123",
-  "status": "pending",
+  "status": "synced",
   "source": "whatsapp",
   "total": 18900,
   "notes": "Entregar en bodega",
@@ -285,7 +288,7 @@ El body **no acepta** precios, asesor, ruta, lista de precios, estado ni origen:
   "clientId": "…",
   "branch": { "id": "…", "name": "Sede Norte" },
   "advisor": { "id": "…", "name": "Carlos Asesor" },
-  "siigo": { "quotationId": null, "url": null },
+  "siigo": { "quotationId": "C-1-30317", "url": "https://publicview.siigo.com/#quotation/…" },
   "createdAt": "…", "updatedAt": "…",
   "items": [
     { "productId": "…", "sku": "PR035", "name": "ACOMETIDA HEMBRA 1/2",
@@ -294,6 +297,8 @@ El body **no acepta** precios, asesor, ruta, lista de precios, estado ni origen:
   "replayed": false
 }
 ```
+
+Si el envío a SIIGO falló: `"status": "approved"` y `"siigo": { "quotationId": null, "url": null, "error": { "code": "MISSING_CLIENT_NIT", "message": "…" } }`. En el [ambiente de pruebas](../guias/ambiente-de-pruebas.md) nunca se envía a SIIGO: `siigo.error.code` es `SIIGO_DISABLED_IN_STAGING`.
 
 **Errores**
 
@@ -314,8 +319,8 @@ El body **no acepta** precios, asesor, ruta, lista de precios, estado ni origen:
 
 Devuelve la cotización con el mismo formato de la creación. Solo se pueden consultar las cotizaciones **creadas con el mismo API key**; cualquier otra responde `404 NOT_FOUND`.
 
-**Estados posibles:** `pending` (en revisión), `sent`, `approved`, `rejected`, `sent_to_siigo`, `synced`, `draft`.
+**Estados posibles:** `synced` (en SIIGO, con link), `approved` (aprobada, aún sin SIIGO), `rejected`, `pending`, `sent`, `sent_to_siigo`, `draft`.
 
-**Link de SIIGO:** una cotización del chatbot nace en `pending` y todavía no existe en SIIGO, así que `siigo.quotationId` y `siigo.url` vienen en `null` al crearla. Cuando un admin la envía a SIIGO, pasa a `synced` y se llenan: `quotationId` es el código de SIIGO (ej. `C-1-30317`) y `url` el enlace público para ver la cotización (`https://publicview.siigo.com/#quotation/...`), que se puede compartir con el cliente. El webhook `quotation.status_changed` a `synced` trae el mismo bloque en `data.quotation.siigo`.
+**Link de SIIGO:** `siigo.quotationId` y `siigo.url` se llenan cuando la cotización queda en SIIGO (estado `synced`), normalmente desde la creación: `quotationId` es el código de SIIGO (ej. `C-1-30317`) y `url` el enlace público para ver la cotización (`https://publicview.siigo.com/#quotation/...`), que se puede compartir con el cliente. El webhook `quotation.status_changed` a `synced` trae el mismo bloque en `data.quotation.siigo`.
 
 Para enterarse de los cambios sin consultar, usa los eventos `quotation.status_changed`, `quotation.approved` y `quotation.rejected` de los [webhooks](./webhooks.md).

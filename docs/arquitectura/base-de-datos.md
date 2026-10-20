@@ -82,7 +82,7 @@ El **cliente** es la fila de `clients`, con su propia empresa (`company_id`) y s
 | `quotation_items` | Líneas | `product_id`, `quantity`, `price_type` (`price_list`/`promotion`), `unit_price` (precio congelado), `subtotal` (columna generada `quantity * unit_price`) |
 | `quotation_comments` | Comentarios en la cotización | `author_id`, `text` |
 
-Estados (`quotation_status`): `draft`, `sent`, `pending`, `approved`, `rejected`, `synced`, `sent_to_siigo`. Las cotizaciones creadas desde la web nacen en `sent` y las del chatbot en `pending`; el push exitoso a SIIGO las pasa a `synced`.
+Estados (`quotation_status`): `draft`, `sent`, `pending`, `approved`, `rejected`, `synced`, `sent_to_siigo`. Las cotizaciones creadas desde la web nacen en `sent` y las del chatbot en `approved` (se envían a SIIGO en la misma petición); el push exitoso a SIIGO las pasa a `synced`.
 
 ### Webhooks
 

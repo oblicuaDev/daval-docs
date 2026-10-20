@@ -105,7 +105,7 @@ curl "$API/quotations/<id>" -H "Authorization: Bearer $KEY"
 1. DAVAL registra en el ambiente de pruebas el endpoint de pruebas del chatbot (`POST /api/webhooks`, ver [Webhooks](../api/webhooks.md#administración-admin)) y entrega el secreto de firma de **ese ambiente**, distinto del de producción.
 2. El equipo de Boostify verifica la conexión: DAVAL ejecuta `POST /api/webhooks/:id/test` y el chatbot debe recibir un evento `ping` con firma válida.
 3. El chatbot crea una cotización de prueba (paso 4 del flujo anterior) y debe recibir `quotation.created`.
-4. DAVAL cambia el estado de esa cotización en el panel de administración del ambiente de pruebas (`pending` → `approved` o `rejected`) y agrega un comentario: el chatbot debe recibir `quotation.status_changed` (más `quotation.approved` o `quotation.rejected`) y `quotation.comment_added`.
+4. La cotización nace `approved` y en este ambiente **no se envía a SIIGO** (`siigo.error.code = SIIGO_DISABLED_IN_STAGING`, `siigo.url` en `null`). DAVAL cambia su estado en el panel de administración del ambiente de pruebas (por ejemplo a `rejected`) y agrega un comentario: el chatbot debe recibir `quotation.status_changed` (más `quotation.rejected`) y `quotation.comment_added`.
 5. DAVAL edita un teléfono, la sucursal o el calendario de una ruta de prueba: el chatbot recibe `client.updated`, `branch.updated` o `route.updated`.
 
 El chatbot también puede consultar el estado en cualquier momento con `GET /quotations/:id`.

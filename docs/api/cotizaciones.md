@@ -52,7 +52,7 @@ Lo devuelven `GET /:id`, `POST /` y `POST /:id/clone`.
 
 | Campo | Notas |
 |---|---|
-| `status` | `draft`, `sent`, `pending`, `approved`, `rejected`, `synced`, `sent_to_siigo`. Desde la web se crea en `sent`; desde el chatbot, en `pending` |
+| `status` | `draft`, `sent`, `pending`, `approved`, `rejected`, `synced`, `sent_to_siigo`. Desde la web se crea en `sent`; desde el chatbot, en `approved` y se envía a SIIGO de inmediato (`synced` si SIIGO la acepta) |
 | `source` | Canal de origen: `web` o `whatsapp` |
 | `routeDate` | Fecha de la ruta a la que va el pedido (`YYYY-MM-DD`), según la ventana de corte al crearla. `null` en cotizaciones anteriores a este campo |
 | `priceType` | `promotion` si ganó el precio promocional, `price_list` si no |

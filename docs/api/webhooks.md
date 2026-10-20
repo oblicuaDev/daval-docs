@@ -74,7 +74,7 @@ Los cambios hechos directamente en la base de datos también generan eventos: se
 ```json
 {
   "quotation": {
-    "id": "…", "code": "COT-000123", "status": "pending", "source": "whatsapp",
+    "id": "…", "code": "COT-000123", "status": "approved", "source": "whatsapp",
     "total": 72000, "notes": "Entregar en bodega", "routeDate": "2026-10-08",
     "clientId": "…", "clientName": "Ferretería El Tornillo",
     "company": { "id": "…", "name": "Ferretería El Tornillo S.A.S." },
@@ -95,12 +95,12 @@ Los cambios hechos directamente en la base de datos también generan eventos: se
 ```json
 {
   "status": "approved",
-  "previousStatus": "pending",
+  "previousStatus": "sent",
   "quotation": { "…": "mismo objeto que en quotation.created" }
 }
 ```
 
-`status` y `previousStatus` describen **este evento**. Estados posibles: `draft`, `sent`, `pending`, `approved`, `rejected`, `synced`, `sent_to_siigo`. Cuando una cotización se envía a SIIGO, pasa a `synced` y `quotation.siigo` trae el número y el enlace.
+`status` y `previousStatus` describen **este evento**. Estados posibles: `draft`, `sent`, `pending`, `approved`, `rejected`, `synced`, `sent_to_siigo`. Cuando una cotización se envía a SIIGO, pasa a `synced` y `quotation.siigo` trae el número y el enlace. Las cotizaciones del chatbot nacen aprobadas (llega `quotation.created` con `status: "approved"`, sin `quotation.approved`) y se envían a SIIGO de inmediato: enseguida llega `quotation.status_changed` de `approved` a `synced`.
 
 ### `quotation.comment_added`
 

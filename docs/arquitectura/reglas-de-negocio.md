@@ -142,7 +142,7 @@ Fuera de alcance se responde `404` (no `403`) para no revelar que el recurso exi
 
 ## Estado y origen de la cotización
 
-- Desde la web, la cotización se crea en estado `sent`. Desde el chatbot, en `pending` para revisión humana.
+- Desde la web, la cotización se crea en estado `sent`. Desde el chatbot, en `approved` y se envía a SIIGO en la misma petición para devolver el link (`siigo.url`) al cliente; si SIIGO falla queda `approved` sin link y un admin la reenvía. En staging no se envía (comparte credenciales de SIIGO con producción).
 - `quotations.source` registra el canal: `web` o `whatsapp`. Para el chatbot lo fija el servidor según la credencial; el body no lo acepta.
 - Solo se pueden cotizar productos activos (`404 PRODUCT_NOT_FOUND` si no).
 

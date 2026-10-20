@@ -68,7 +68,7 @@ Las credenciales de SIIGO se guardan en la tabla `siigo_settings`, no en variabl
 
 | Variable | Descripción |
 |---|---|
-| `VITE_API_URL` | URL base de la API **incluyendo `/api`**. Local: `http://localhost:3000/api`. En Vercel con API en el mismo dominio: `https://<app>.vercel.app/api` |
+| `VITE_API_URL` | URL base de la API **incluyendo `/api`**. Local: `http://localhost:3000/api`. En Vercel con API en el mismo dominio: `https://<app>.vercel.app/api` (producción: `https://daval-app.vercel.app/api`) |
 | `VITE_GOOGLE_MAPS_API_KEY` | Clave de Google Maps (Maps JavaScript API + Geocoding). Restríngela por dominio |
 
 :::caution[Variables de Vite]

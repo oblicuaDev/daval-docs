@@ -7,6 +7,10 @@ title: Despliegue
 
 Hay dos formas de desplegar. La configuración actual del repositorio (`vercel.json`) usa la opción A.
 
+:::info[Producción]
+DAVAL App corre en producción en **https://daval-app.vercel.app**. Las URL con `<app>.vercel.app` de esta guía son genéricas, para quien despliegue una instancia nueva.
+:::
+
 ## Opción A: todo en Vercel (recomendada)
 
 Frontend estático y API como función serverless en el mismo dominio.
@@ -37,10 +41,10 @@ Pasos:
 
 1. Importa el repositorio en Vercel (detecta Vite).
 2. Configura las variables del backend y del frontend en **Settings → Environment Variables** (ver [Variables de entorno](./variables-de-entorno.md)). Como comparten dominio:
-   - `VITE_API_URL=https://<app>.vercel.app/api`
+   - `VITE_API_URL=https://<app>.vercel.app/api` (en producción: `https://daval-app.vercel.app/api`)
    - `CORS_ORIGIN` puede quedar vacío o con el mismo dominio.
    - `NODE_ENV=production` y **no** definas `PORT` (así el pool usa 2 conexiones).
-3. Despliega y verifica `https://<app>.vercel.app/api/health`.
+3. Despliega y verifica `https://<app>.vercel.app/api/health` (en producción: `https://daval-app.vercel.app/api/health`).
 
 Limitaciones del modo serverless:
 

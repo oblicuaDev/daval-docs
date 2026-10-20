@@ -23,10 +23,6 @@ dvl_<32 caracteres aleatorios>
 
 Los primeros 12 caracteres (`dvl_` + 8) son el prefijo, que no es secreto y sirve para ubicar el registro. Se guarda solo el hash bcrypt del key completo (tabla `api_keys`). **El valor completo se muestra una única vez**, en la respuesta de `POST /api/api-keys`; después no se puede volver a consultar, solo revocar y generar uno nuevo.
 
-:::danger[Nunca publiques un key]
-No pongas un key real en esta documentación, en repositorios, tickets ni chats. Si un key queda expuesto, revócalo de inmediato (`DELETE /api/api-keys/:id`) y genera uno nuevo. Entrégalo al equipo externo por un canal seguro (gestor de secretos o enlace de un solo uso).
-:::
-
 ## Scopes disponibles
 
 Cada credencial debe tener **solo** los scopes que necesita (mínimo privilegio).

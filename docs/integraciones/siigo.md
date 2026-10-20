@@ -91,16 +91,17 @@ La sync se ejecuta **esperando el resultado** (no en segundo plano): en Vercel u
 | `stock_control` | `stock_control` (si es `false`, SIIGO no lleva inventario y `stock` no indica disponibilidad) |
 | primer valor de `prices[0].price_list` | `base_price` |
 | `active` | `active` |
-| `metadata.image_url` | `image_url` (solo si viene; no borra la imagen local) |
+| `metadata.image_url` | `image_url` (solo si el producto no tiene imagen: la subida en DAVAL tiene prioridad) |
+| `account_group.name` (grupo de inventario) | `category_id`: se crea la categoría con ese nombre si no existe, y se asigna solo si el producto no tiene categoría |
 | cada `prices[0].price_list[]` | fila en `product_price_lists` por `price_list_name` (informativa: el precio de venta usa las listas de DAVAL) |
 
-Cada producto guarda `last_sync_at`. Los campos propios de DAVAL (`category_id`, `quality`, `description`) no se tocan.
+Cada producto guarda `last_sync_at`. Los campos propios de DAVAL (`quality`, `description`) no se tocan, y una categoría asignada en DAVAL tampoco: la del grupo de SIIGO solo llena las vacías.
 
 ### Comportamiento por caso
 
 | En SIIGO | En DAVAL |
 |---|---|
-| Producto nuevo | Se crea en la próxima sync (completa o incremental), activo según SIIGO, sin categoría ni calidad |
+| Producto nuevo | Se crea en la próxima sync (completa o incremental), activo según SIIGO, con la categoría de su grupo de inventario y sin calidad |
 | Producto modificado (nombre, precio, unidad, stock) | Se actualiza en la próxima sync |
 | Producto marcado inactivo | `active = false` en la próxima sync: deja de aparecer en el catálogo y no se puede cotizar |
 | Producto eliminado | `active = false` en la próxima sync **completa** |
@@ -168,7 +169,8 @@ pushQuoteToSiigo(quoteId, userId, { force })
   7. Inserta siigo_quote_integrations (status = pending)
   8. POST /v1/quotations con reintentos (429, 500, 502, 503, 504; espera 1 s → 2 s → 4 s)
        └─ falla → integración = error, se relanza el error
-  9. GET /v1/quotations/{uuid} para obtener el link del PDF (si falla, sigue sin link)
+  9. Link de la cotización: public_url de la respuesta (publicview.siigo.com); si no viene,
+     GET /v1/quotations/{uuid} (si falla, sigue sin link)
  10. Transacción: integración = success; cotización = synced + siigo_quotation_id + siigo_url
        └─ falla el commit → 500 DB_COMMIT_FAILED con el ID de SIIGO para recuperarlo a mano
 ```
@@ -218,7 +220,7 @@ Cada asesor debe tener `siigo_seller_id` (el ID numérico del usuario en SIIGO):
 
 ### Link del PDF
 
-SIIGO no siempre devuelve el link del PDF al crear la cotización. Si falta, el botón **Obtener link** llama a `POST /quotes/:id/refresh-url`, que vuelve a consultar SIIGO. Si el plan no incluye PDF, el enlace queda en `null`.
+SIIGO devuelve el enlace público de la cotización en `public_url` (`https://publicview.siigo.com/#quotation/...`) y se guarda en `siigo_url`. Si falta, el botón **Obtener link** llama a `POST /quotes/:id/refresh-url`, que vuelve a consultar SIIGO; si tampoco viene, se conserva el enlace que hubiera (por ejemplo, uno pegado a mano).
 
 ## Checklist para enviar una cotización sin errores
 

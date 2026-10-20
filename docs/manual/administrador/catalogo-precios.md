@@ -23,6 +23,8 @@ El cliente siempre ve el precio final; no tiene que hacer cuentas.
 
 **Nueva Categoría** → nombre, descripción y si está activa. Los clientes filtran el catálogo por categoría.
 
+La sincronización con SIIGO crea una categoría por cada **grupo de inventario** de SIIGO (Cacharrería, Sanitario, Eléctrico…) y se la asigna a los productos que no tengan categoría. Si cambias la categoría de un producto aquí, la sincronización la respeta.
+
 ![Categorías](/img/manual/admin/categorias.png)
 
 ## Productos
@@ -59,6 +61,10 @@ El botón **Importar Excel** es una demostración y todavía no procesa archivos
 6. Guarda.
 
 Cada lista muestra a quién aplica, cuántos **clientes asignados** y cuántos **precios cargados** tiene.
+
+:::caution[Una lista sin productos no se puede asignar]
+Si el archivo no trae ningún SKU del catálogo, la lista no se crea. Si algunos SKU no existen, se guardan los demás y la pantalla te muestra cuáles se omitieron. Una lista que aparece como **Sin productos** no se puede asignar a clientes ni volver lista general hasta que le cargues precios.
+:::
 
 Para editar una lista pulsa el lápiz. Puedes cambiar los clientes sin volver a subir el archivo. Si subes un archivo nuevo, **reemplaza** todos los precios anteriores.
 

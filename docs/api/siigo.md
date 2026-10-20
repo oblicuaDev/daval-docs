@@ -187,7 +187,7 @@ Intentos de envío de una cotización.
 
 ### `POST /api/integrations/siigo/quotes/:quoteId/refresh-url`
 
-Vuelve a consultar la cotización en SIIGO (`GET /v1/quotations/{uuid}`) para obtener el enlace del PDF y lo guarda en `siigo_url`. Se usa desde el botón "Obtener link" cuando el envío original no trajo el enlace.
+Vuelve a consultar la cotización en SIIGO (`GET /v1/quotations/{uuid}`) para obtener su enlace público (`public_url`) y lo guarda en `siigo_url`. Se usa desde el botón "Obtener link" cuando el envío original no trajo el enlace. Si SIIGO no devuelve enlace, no se borra el que ya hubiera.
 
 **Respuesta `200`:** `{ "siigoUrl": "https://…" | null, "siigoUuid": "…", "raw": { …respuesta de SIIGO… } }`
 

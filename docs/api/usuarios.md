@@ -86,6 +86,7 @@ Para crear un cliente **sin** usuario de login (solo WhatsApp), usa [`POST /api/
 | 400 | `BRANCH_COMPANY_MISMATCH` | La sucursal no es de esa empresa |
 | 403 | `FORBIDDEN` | Auto-registro con un rol distinto de `client` |
 | 404 | `COMPANY_NOT_FOUND` / `BRANCH_NOT_FOUND` / `PRICE_LIST_NOT_FOUND` | Referencia inválida o inactiva |
+| 422 | `PRICE_LIST_EMPTY` | La lista de precios no tiene productos |
 | 409 | `DUPLICATE_EMAIL` | Email ya registrado |
 | 409 | `DUPLICATE_NIT` | Ya existe un cliente con ese NIT |
 

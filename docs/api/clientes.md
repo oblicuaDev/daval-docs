@@ -83,7 +83,7 @@ Crea un cliente **sin** usuario de login.
 
 **Respuesta `201`:** `{ "id": "<clients.id>" }`
 
-**Errores:** `400 INVALID_PHONE`, `404 BRANCH_NOT_FOUND`, `404 PRICE_LIST_NOT_FOUND`, `409 DUPLICATE_NIT`.
+**Errores:** `400 INVALID_PHONE`, `404 BRANCH_NOT_FOUND`, `404 PRICE_LIST_NOT_FOUND`, `422 PRICE_LIST_EMPTY` (lista sin productos), `409 DUPLICATE_NIT`.
 
 ---
 
@@ -94,7 +94,7 @@ Actualiza cualquier subconjunto de `name`, `email`, `nit`, `priceListId`, `compa
 - Si cambia la empresa o la sucursal, se validan juntas (la sucursal debe ser de la empresa) y se actualizan la ruta y el asesor del cliente.
 - Si el cliente tiene login, la empresa y la sucursal también se actualizan en su usuario.
 
-**Respuesta `200`:** `{ "id": "<uuid>" }` · **Errores:** `400 EMPTY_PATCH`, `404 NOT_FOUND`, `404 BRANCH_NOT_FOUND`, `404 PRICE_LIST_NOT_FOUND`, `409 DUPLICATE_NIT`.
+**Respuesta `200`:** `{ "id": "<uuid>" }` · **Errores:** `400 EMPTY_PATCH`, `404 NOT_FOUND`, `404 BRANCH_NOT_FOUND`, `404 PRICE_LIST_NOT_FOUND`, `422 PRICE_LIST_EMPTY` (solo si cambia la lista y la nueva no tiene productos), `409 DUPLICATE_NIT`.
 
 ---
 

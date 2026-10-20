@@ -94,7 +94,7 @@ El chatbot reconoce al cliente **por estos números**. Si el número con el que 
 
 ![Lista de asesores](/img/manual/admin/asesores.png)
 
-1. Pulsa **Nuevo Asesor** → nombre completo, email y contraseña.
+1. Pulsa **Nuevo Asesor** → nombre completo, email y contraseña. Deja marcada **Es una contraseña temporal** (viene marcada) para que el asesor cree su propia contraseña la primera vez que ingrese; luego comunícale su correo y la contraseña temporal.
 2. En la lista, usa **Asignar vendedor SIIGO** para elegir a qué vendedor de SIIGO corresponde.
 
 :::caution[Vendedor SIIGO]

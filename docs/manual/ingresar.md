@@ -19,6 +19,16 @@ La plataforma te lleva a tu sección según tu perfil (cliente, asesor o adminis
 No tienes que volver a ingresar cada vez: la sesión se mantiene abierta en ese navegador por varios días. Si cierras sesión en una pestaña, se cierra en todas.
 :::
 
+### Primer ingreso con contraseña temporal
+
+Si DAVAL te creó la cuenta con una **contraseña temporal**, al ingresar verás la pantalla **Cambia tu contraseña**:
+
+1. Escribe la **contraseña temporal** que te entregaron.
+2. Escribe tu **nueva contraseña** (mínimo 8 caracteres) y confírmala.
+3. Pulsa **Guardar y continuar**. Entrarás a tu sección con la nueva contraseña.
+
+Hasta que la cambies no podrás usar el resto de la plataforma.
+
 ### ¿Olvidaste tu contraseña?
 
 Por ahora la plataforma no tiene opción de "recuperar contraseña". Pide a tu asesor o al administrador de DAVAL que te asigne una nueva.

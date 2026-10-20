@@ -65,6 +65,7 @@ Crea un usuario.
 | `priceListId` | uuid \| null | No | Solo clientes; debe existir y estar activa |
 | `nit` | string (máx. 20) \| null | No | Solo clientes; único en `clients`. Por defecto el NIT de la empresa si está libre, o un placeholder `NIT-xxxxxxxx` |
 | `siigoSellerId` | entero > 0 \| null | No | Solo asesores (ID de vendedor en SIIGO) |
+| `mustChangePassword` | boolean | No | Solo admin. La contraseña es temporal: el usuario debe cambiarla al ingresar ([ver Autenticación](./auth.md#cambio-de-contraseña-obligatorio)). En auto-registro se ignora |
 | `active` | boolean | No | Por defecto `true` |
 
 **Proceso para rol `client`**
@@ -96,7 +97,7 @@ Actualiza un usuario.
 
 **Acceso:** admin
 
-**Body (todos opcionales):** `name`, `email`, `role`, `active`, `companyId`, `branchId`, `password` (se vuelve a hashear), `siigoSellerId` (acepta `null` para desasignar).
+**Body (todos opcionales):** `name`, `email`, `role`, `active`, `companyId`, `branchId`, `password` (se vuelve a hashear), `siigoSellerId` (acepta `null` para desasignar), `mustChangePassword`.
 
 :::note
 Si cambian `companyId` o `branchId` de un usuario cliente, también se actualizan la empresa y la sucursal de su ficha `clients`, junto con la ruta y el asesor de la nueva sucursal. La lista de precios se cambia desde [`PUT /api/clients/:id`](./clientes.md) o desde [listas de precios](./listas-de-precios.md).

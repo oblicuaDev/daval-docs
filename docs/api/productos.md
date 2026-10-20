@@ -22,6 +22,7 @@ Lista productos con precios resueltos para el usuario que llama (máximo 500, or
 | `active` | `true` \| `false` | Filtra por estado |
 | `categoryId` | uuid | Filtra por categoría |
 | `search` | string | Busca en nombre o SKU (`ILIKE`) |
+| `siigoId` | string | Coincidencia exacta con `products.siigo_id` (cargues masivos desde Excel) |
 | `priceListId` | uuid | Solo admin/asesor: calcula precios con esa lista. Para clientes se ignora y se usa su lista asignada |
 
 **Respuesta `200`**
@@ -41,6 +42,7 @@ Lista productos con precios resueltos para el usuario que llama (máximo 500, or
       "quality": "alta",
       "imageUrl": "https://…/product-images/abc.webp",
       "active": true,
+      "siigoId": "4bd17142-cab4-4141-b457-f93c8af69d64",
       "basePrice": 10000,
       "priceListPrice": 9000,
       "promotionPrice": 8500,
@@ -153,5 +155,5 @@ curl -X POST "$API/products/$ID/image" \
 | 404 | `NOT_FOUND` | Producto inexistente |
 
 :::note[Productos desde SIIGO]
-La mayoría de productos se crean y actualizan con la [sincronización de SIIGO](./siigo.md#sincronización-de-productos), que hace *upsert* por `siigo_id`. Los campos locales (`category_id`, `quality`, `description`) no se sobrescriben en la sincronización.
+La mayoría de productos se crean y actualizan con la [sincronización de SIIGO](./siigo.md#sincronización-de-productos), que hace *upsert* por `siigo_id`. Los campos locales (`category_id`, `quality`, `description`) no se sobrescriben en la sincronización, y la imagen subida en Daval tiene prioridad sobre la de SIIGO.
 :::

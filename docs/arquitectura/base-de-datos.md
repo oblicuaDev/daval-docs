@@ -44,7 +44,7 @@ PostgreSQL con extensiones `uuid-ossp` (claves `UUID`) y `pg_trgm` (búsquedas `
 
 | Tabla | Propósito | Columnas clave |
 |---|---|---|
-| `users` | Cuentas de acceso de los tres roles | `email` (único), `password_hash` (bcrypt), `role`, `active`, `company_id`, `branch_id`, `siigo_seller_id`, `token_version` (se incrementa por trigger al cambiar contraseña o desactivar; revoca refresh tokens) |
+| `users` | Cuentas de acceso de los tres roles | `email` (único), `password_hash` (bcrypt), `role`, `active`, `company_id`, `branch_id`, `siigo_seller_id`, `token_version` (se incrementa por trigger al cambiar contraseña o desactivar; revoca refresh tokens), `must_change_password` (contraseña temporal: debe cambiarla al ingresar) |
 | `clients` | El cliente: ficha comercial, con o sin usuario de login | `user_id` (opcional, único), `company_id`, `branch_id` (sucursal por defecto), `nit` (único), `email` (opcional), `price_list_id`, `route_id`/`advisor_id` (copias de la sucursal), `siigo_client_id`, `active` |
 | `contact_phones` | Teléfonos de WhatsApp de un cliente | `client_id`, `phone_e164` (E.164, ej. `+573001234567`), `label`, `is_whatsapp`; único `(client_id, phone_e164)`. Un mismo número puede estar en varios clientes |
 | `api_keys` | Credenciales de integraciones externas | `key_prefix` (único), `key_hash` (bcrypt), `scopes`, `active`, `last_used_at`, `revoked_at`, `expires_at`, `replaced_by` |
@@ -128,6 +128,7 @@ Los eventos los crean **triggers** (`webhook_emit()`) sobre `quotations`, `quota
 | `018_webhooks` | `migrations/018_…` | Tablas de webhooks, función `webhook_emit()` y triggers de eventos |
 | `017_siigo_sync_modes` | `migrations/017_…` | Sync completa e incremental: `siigo_sync_logs.mode` e `items_deactivated`, `siigo_settings.last_full_sync_at` / `last_incremental_sync_at`, `products.stock_control` |
 | `016_credential_security` | `migrations/016_…` | `users.token_version` + trigger de revocación de sesiones; `api_keys.expires_at` y `replaced_by` |
+| `019_must_change_password` | `migrations/019_…` | `users.must_change_password` (cambio de contraseña obligatorio al primer ingreso) |
 | `seed_003_qa_demo` | `seeds/003_qa_demo.sql` | Datos de QA/demo para recorrer todas las pantallas y estados (solo con `--seed`). Usuarios con contraseñas conocidas: `migrate.js` lo aplica **solo contra localhost**, ni siquiera con `ALLOW_REMOTE_SEED=1`. Ver [Instalación local](../guias/instalacion-local.md#datos-de-qa-solo-base-local) |
 | `seed_002_integration_test` | `seeds/002_integration_test.sql` | Escenarios para probar integraciones (solo con `--seed`). Ver [Ambiente de pruebas](../guias/ambiente-de-pruebas.md) |
 | `seed_001_initial` | `seeds/001_initial.sql` | Datos de desarrollo (solo con `--seed`). Crea usuarios con contraseñas conocidas: `migrate.js` lo rechaza contra una base remota salvo `ALLOW_REMOTE_SEED=1`. **Nunca en producción** |

@@ -285,6 +285,7 @@ El body **no acepta** precios, asesor, ruta, lista de precios, estado ni origen:
   "clientId": "…",
   "branch": { "id": "…", "name": "Sede Norte" },
   "advisor": { "id": "…", "name": "Carlos Asesor" },
+  "siigo": { "quotationId": null, "url": null },
   "createdAt": "…", "updatedAt": "…",
   "items": [
     { "productId": "…", "sku": "PR035", "name": "ACOMETIDA HEMBRA 1/2",
@@ -314,5 +315,7 @@ El body **no acepta** precios, asesor, ruta, lista de precios, estado ni origen:
 Devuelve la cotización con el mismo formato de la creación. Solo se pueden consultar las cotizaciones **creadas con el mismo API key**; cualquier otra responde `404 NOT_FOUND`.
 
 **Estados posibles:** `pending` (en revisión), `sent`, `approved`, `rejected`, `sent_to_siigo`, `synced`, `draft`.
+
+**Link de SIIGO:** una cotización del chatbot nace en `pending` y todavía no existe en SIIGO, así que `siigo.quotationId` y `siigo.url` vienen en `null` al crearla. Cuando un admin la envía a SIIGO, pasa a `synced` y se llenan: `quotationId` es el código de SIIGO (ej. `C-1-30317`) y `url` el enlace público para ver la cotización (`https://publicview.siigo.com/#quotation/...`), que se puede compartir con el cliente. El webhook `quotation.status_changed` a `synced` trae el mismo bloque en `data.quotation.siigo`.
 
 Para enterarse de los cambios sin consultar, usa los eventos `quotation.status_changed`, `quotation.approved` y `quotation.rejected` de los [webhooks](./webhooks.md).

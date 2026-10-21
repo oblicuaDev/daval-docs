@@ -28,6 +28,7 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
       "active": true,
       "scope": "selected",
       "productCount": 812,
+      "pricesUpdatedAt": "2026-10-21T17:36:17.649Z",
       "clientIds": ["<clients.id>", "<clients.id>"]
     }
   ]
@@ -38,6 +39,7 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
 |---|---|
 | `scope` | `all` si es la lista general (`isDefault`), `selected` si no |
 | `productCount` | Productos con precio en la lista. Con `0` la lista no se puede asignar |
+| `pricesUpdatedAt` | Fecha del último precio cargado o modificado en la lista (`null` si no tiene precios) |
 | `clientIds` | IDs de **cliente** (`clients.id`, con o sin usuario de login) que tienen esta lista asignada |
 
 ## `POST /api/price-lists`
@@ -83,7 +85,7 @@ Una lista sin productos no se puede asignar por ningún camino: aquí, en [`/api
 
 ## `PUT /api/price-lists/:id`
 
-**Acceso:** admin. Mismos campos, opcionales (`COALESCE`).
+**Acceso:** admin. Mismos campos, opcionales (`COALESCE`). Al renombrar, los precios de la lista se conservan.
 
 **Respuesta `200`:** `{ "id": "<uuid>" }` · **Errores:** `404 NOT_FOUND`.
 
@@ -101,6 +103,10 @@ Todos los productos con su precio base y, si existe, su precio específico en es
 
 **Acceso:** Autenticado
 
+| Query | Descripción |
+|---|---|
+| `priced=1` | Solo los productos que tienen precio en la lista (lo que muestra **Ver precios** en el panel) |
+
 **Respuesta `200`**
 
 ```json
@@ -113,7 +119,8 @@ Todos los productos con su precio base y, si existe, su precio específico en es
       "unit": "caja",
       "active": true,
       "basePrice": 10000,
-      "customPrice": 8800
+      "customPrice": 8800,
+      "priceUpdatedAt": "2026-10-21T17:36:17.649Z"
     }
   ]
 }
@@ -123,7 +130,12 @@ Todos los productos con su precio base y, si existe, su precio específico en es
 
 ## `POST /api/price-lists/:id/products`
 
-Reemplaza **todos** los precios específicos de la lista por los enviados (borra y vuelve a insertar en una transacción). Enviar `items: []` elimina todos los precios específicos, salvo que la lista tenga clientes o sea la general (`422 PRICE_LIST_IN_USE`).
+Carga precios específicos en la lista, en una transacción. El campo `mode` define qué pasa con los precios que ya tiene:
+
+| `mode` | Efecto |
+|---|---|
+| `replace` (por defecto) | La lista queda **exactamente** con los ítems enviados: los demás precios se eliminan. Enviar `items: []` vacía la lista, salvo que tenga clientes o sea la general (`422 PRICE_LIST_IN_USE`) |
+| `merge` | Actualiza el precio de los productos enviados y agrega los nuevos. Los demás precios de la lista **se conservan** |
 
 Cada ítem identifica el producto por `productId` o por `sku`. Los SKU se buscan en todo el catálogo; los que no existen se omiten y se devuelven en `notFound`. Si ninguno coincide, responde `422 PRICE_LIST_NO_MATCHES` con `details.notFound`.
 
@@ -133,6 +145,7 @@ Cada ítem identifica el producto por `productId` o por `sku`. Los SKU se buscan
 
 ```json
 {
+  "mode": "merge",
   "items": [
     { "productId": "a1b2…", "price": 8800 },
     { "sku": "GR002", "price": 15500 }
@@ -140,4 +153,8 @@ Cada ítem identifica el producto por `productId` o por `sku`. Los SKU se buscan
 }
 ```
 
-**Respuesta `200`:** `{ "updated": 2, "notFound": [] }` · **Errores:** `404 NOT_FOUND` si la lista no existe, `422 PRICE_LIST_NO_MATCHES`, `422 PRICE_LIST_IN_USE`.
+**Respuesta `200`:** `{ "updated": 2, "total": 815, "mode": "merge", "notFound": [] }`, donde `updated` son los ítems cargados y `total` los productos con precio en la lista después de la carga. · **Errores:** `400` con un `mode` distinto de `replace`/`merge`, `404 NOT_FOUND` si la lista no existe, `422 PRICE_LIST_NO_MATCHES`, `422 PRICE_LIST_IN_USE`.
+
+:::note[Precios de SIIGO]
+Los precios de las listas de SIIGO se guardan en la misma tabla, pero son filas aparte (sin `price_list_id`). Una lista de Daval puede llamarse igual que una de SIIGO (p. ej. «CONTADO»): la sincronización diaria no toca sus precios (migración 020).
+:::

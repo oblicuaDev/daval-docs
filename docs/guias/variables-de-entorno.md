@@ -62,13 +62,13 @@ Las credenciales de SIIGO se guardan en la tabla `siigo_settings`, no en variabl
 |---|---|
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` | Servidor SMTP |
 | `ADMIN_NOTIFICATION_EMAIL` | Destinatario de avisos de nuevos registros |
-| `APP_URL` | URL pública del frontend, para enlaces en correos |
+| `APP_URL` | URL pública del frontend **incluyendo `/pedidos`**, para enlaces en correos. Producción: `https://distribucionesdaval.com/pedidos` |
 
 ## Frontend (`.env` en la raíz)
 
 | Variable | Descripción |
 |---|---|
-| `VITE_API_URL` | URL base de la API **incluyendo `/api`**. Local: `http://localhost:3000/api`. En Vercel con API en el mismo dominio: `https://<app>.vercel.app/api` (producción: `https://daval-app.vercel.app/api`) |
+| `VITE_API_URL` | URL base de la API **incluyendo `/api`**. Local: `http://localhost:3000/api`. En Vercel con API en el mismo dominio: `/pedidos/api` (relativa, sirve en cualquier dominio del proyecto) |
 | `VITE_GOOGLE_MAPS_API_KEY` | Clave de Google Maps (Maps JavaScript API + Geocoding). Restríngela por dominio |
 
 :::caution[Variables de Vite]

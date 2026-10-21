@@ -31,6 +31,8 @@ src/
 
 ## Rutas por rol
 
+La app se publica bajo **`/pedidos`** (`base` de `vite.config.js`; `BrowserRouter` usa `basename` = `import.meta.env.BASE_URL`). Las rutas de esta sección son relativas a esa base: `/admin` es `https://distribucionesdaval.com/pedidos/admin`. En desarrollo: `http://localhost:5173/pedidos/`.
+
 Todas las páginas se cargan con `lazy()` y un único `Suspense`, así cada rol descarga solo su bundle. `ProtectedRoute` valida que el usuario tenga el rol requerido.
 
 ### Administrador (`/admin`)

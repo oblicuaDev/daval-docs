@@ -52,21 +52,30 @@ El botón **Importar Excel** es una demostración y todavía no procesa archivos
 ![Listas de precios](/img/manual/admin/listas-precios.png)
 
 1. Pulsa **Descargar plantilla** para obtener el formato.
-2. Llena el archivo con tres columnas: **SKU**, **Nombre producto**, **Precio** (solo números, sin puntos ni comas).
+2. Llena el archivo con tres columnas: **SKU**, **Nombre producto**, **Precio**. El precio puede ir como número de Excel o como texto (`12500`, `12.500` o `$ 12.500,50`).
 3. Pulsa **Nueva lista** y escribe el **Nombre de la lista** (por ejemplo, *Lista Ferreterías Mayoristas*).
 4. En **Aplicación de la lista** elige:
    - **Todos los clientes:** se vuelve la **lista general**, la que usan los clientes que no tienen una lista propia. Solo puede haber una lista general.
    - **Clientes seleccionados:** busca y marca los clientes que usarán esta lista.
-5. En **Archivo de precios**, pulsa **Buscar archivo** y sube la plantilla en formato **CSV**.
+5. En **Archivo de precios**, pulsa **Buscar archivo** y sube el archivo en **Excel (.xlsx)** o **CSV**. Se lee la primera hoja con datos; las columnas se reconocen por su encabezado (*SKU*/*Código*, *Precio*/*Valor*). La pantalla te dice cuántos precios encontró antes de guardar.
 6. Guarda.
 
-Cada lista muestra a quién aplica, cuántos **clientes asignados** y cuántos **precios cargados** tiene.
+Cada lista muestra a quién aplica, cuántos **clientes asignados** y **precios cargados** tiene, y la fecha de su **última actualización**.
+
+### Ver los precios de una lista
+
+Pulsa **Ver precios** en la tarjeta de la lista. Verás cada producto con su SKU, el **precio base** (el de SIIGO), el **precio de la lista** y la diferencia en porcentaje (verde si la lista es más barata). Puedes buscar por SKU o nombre y pulsar **Descargar lista** para bajar todos sus precios en el mismo formato de la plantilla.
+
+Los precios quedan guardados: no hace falta volver a cargar el archivo al entrar de nuevo.
 
 :::caution[Una lista sin productos no se puede asignar]
 Si el archivo no trae ningún SKU del catálogo, la lista no se crea. Si algunos SKU no existen, se guardan los demás y la pantalla te muestra cuáles se omitieron. Una lista que aparece como **Sin productos** no se puede asignar a clientes ni volver lista general hasta que le cargues precios.
 :::
 
-Para editar una lista pulsa el lápiz. Puedes cambiar los clientes sin volver a subir el archivo. Si subes un archivo nuevo, **reemplaza** todos los precios anteriores.
+Para editar una lista pulsa el lápiz. Puedes cambiar el nombre o los clientes sin volver a subir el archivo: los precios se conservan. Para cambiar precios, pulsa **Descargar precios actuales**, edita el archivo y súbelo. Luego elige cómo aplicarlo:
+
+- **Actualizar y agregar** (recomendado): cambia los precios de los productos que vienen en el archivo y agrega los nuevos. Los demás precios de la lista se conservan, así que puedes subir un archivo solo con los productos que cambiaron.
+- **Reemplazar toda la lista:** la lista queda solo con los productos del archivo; los demás precios se eliminan.
 
 :::tip[Quitar un cliente de una lista]
 Desmárcalo en *Clientes seleccionados* y guarda. Ese cliente pasa a usar la lista general. También puedes cambiar la lista de un cliente desde **Usuarios**.

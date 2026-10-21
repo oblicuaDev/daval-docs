@@ -1,14 +1,14 @@
 // Genera las capturas del manual con Playwright.
 //   npm run capturas                      → todas
 //   npm run capturas -- admin/clientes    → solo las indicadas
-// Variables: APP_URL (por defecto http://localhost:5173), API_URL (http://localhost:3000),
+// Variables: APP_URL (por defecto http://localhost:5173/pedidos), API_URL (http://localhost:3000),
 // CHROME_PATH (por defecto el Chromium que instala `npx playwright install chromium`).
 import { chromium } from 'playwright-core';
 import path from 'node:path';
 import fs from 'node:fs';
 import plan from './plan.mjs';
 
-const BASE = process.env.APP_URL ?? 'http://localhost:5173';
+const BASE = process.env.APP_URL ?? 'http://localhost:5173/pedidos';
 const API = process.env.API_URL ?? 'http://localhost:3000';
 const OUT = path.resolve(import.meta.dirname, '../../static/img/manual');
 const only = new Set(process.argv.slice(2));

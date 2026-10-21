@@ -79,7 +79,7 @@ O por separado:
 
 ```bash
 npm run dev:api     # API en http://localhost:3000 (node --watch)
-npm run dev         # Frontend en http://localhost:5173
+npm run dev         # Frontend en http://localhost:5173/pedidos/
 ```
 
 Comprueba la API:

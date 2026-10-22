@@ -19,8 +19,8 @@ Una ruta es el recorrido de entrega. Su calendario determina **qué días** se e
    - **Fecha de referencia** (solo quincenal): cualquier fecha en que la ruta **sí** sale. A partir de ella se repite cada 2 semanas.
    - **Cierre de cotizaciones**: cuántos días antes de la ruta se cierra la recepción (*El mismo día*, *1 día antes*, *2 días antes*…).
    - **Hora de cierre**.
-   - **Ciudad**
-   - Opcional: **zona**, **calle / carrera inicial y final** y la cobertura en el mapa (**Abrir mapa**, **Centrar en zona**).
+   - **Departamento / ciudad**: por ejemplo *Cundinamarca*, *Bogotá* o *Huila*.
+   - **Municipios / localidades**: los lugares que cubre la ruta, separados por comas (*Madrid, Mosquera, Funza, Facatativá*). Para Bogotá, las localidades (*Suba, Engativá, Fontibón*). **Ver en el mapa** abre la búsqueda en Google Maps.
 3. Guarda.
 
 La tarjeta **Regla de recepción** te describe el calendario mientras lo configuras, por ejemplo: *"La ruta opera Lunes cada dos semanas. Los clientes pueden cotizar hasta 3 días antes de la ruta a las 17:00; la recepción reabre el día siguiente a cada ruta."*

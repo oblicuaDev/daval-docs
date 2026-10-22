@@ -141,6 +141,8 @@ Crea una ruta.
 | `advisorId` | uuid \| null | No |
 | `active` | boolean | No (por defecto `true`) |
 
+`city` es el departamento o ciudad y `mapZone` los municipios o localidades que cubre la ruta (texto separado por comas). `quadrantId`, `quadrantName`, `streetFrom`, `streetTo`, `carreraFrom`, `carreraTo`, `bounds` y `center` son de la cobertura por calles anterior: se aceptan por compatibilidad, pero el panel ya no los usa.
+
 El servidor valida que el calendario sea usable y responde `400 INVALID_SCHEDULE` si:
 
 - la ruta quincenal no tiene `anchorDate`, o esa fecha no es un día de operación;

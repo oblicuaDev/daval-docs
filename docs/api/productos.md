@@ -11,7 +11,7 @@ Los precios de los productos **siempre los calcula el servidor**. Ver [Reglas de
 
 ## `GET /api/products`
 
-Lista productos con precios resueltos para el usuario que llama (máximo 500, ordenados por nombre).
+Lista productos con precios resueltos para el usuario que llama, ordenados por nombre. Devuelve todo el catálogo que cumpla los filtros, sin paginar (el catálogo del cliente y el panel de productos filtran en el navegador). Hasta octubre de 2026 cortaba en 500 y los productos de la «S» en adelante no aparecían.
 
 **Acceso:** Autenticado
 

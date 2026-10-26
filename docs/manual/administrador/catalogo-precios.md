@@ -39,7 +39,7 @@ La mayoría de productos llegan desde SIIGO con la [sincronización](./siigo.md#
 - Productos relacionados (*cross-selling*)
 - **Producto activo:** desactívalo para ocultarlo del catálogo sin borrarlo
 
-Filtra por categoría, calidad o busca por nombre o SKU. **Nuevo Producto** crea uno manual (útil para productos que no están en SIIGO, aunque no podrán enviarse en cotizaciones a SIIGO).
+Filtra por categoría, calidad o estado, o busca por nombre o SKU. El filtro de estado muestra por defecto los **Activos**; elige **Inactivos** para ver los desactivados aquí o en SIIGO (no aparecen en el catálogo del cliente) o **Todos los estados**. **Nuevo Producto** crea uno manual (útil para productos que no están en SIIGO, aunque no podrán enviarse en cotizaciones a SIIGO).
 
 :::note
 El botón **Importar Excel** es una demostración y todavía no procesa archivos.

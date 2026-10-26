@@ -61,7 +61,7 @@ El **cliente** es la fila de `clients`, con su propia empresa (`company_id`) y s
 |---|---|---|
 | `categories` | Categorías de producto (en la UI: "centros de costos") | `name`, `active` |
 | `products` | Catálogo | `sku` (único), `siigo_id` (único), `base_price`, `stock`, `unit`, `quality`, `image_url`, `description`, `last_sync_at` |
-| `price_lists` | Listas de precios | `name` (único), `multiplier`, `is_default` (solo una puede ser `TRUE`), `active` |
+| `price_lists` | Listas de precios | `name` (único), `multiplier`, `is_default` (solo una puede ser `TRUE`), `active`, `siigo_name` (único; lista de SIIGO vinculada: sus precios los escribe la sincronización) |
 | `product_price_lists` | Precio específico de un producto en una lista | `product_id`, `price_list_id`, `price_list_name`, `price`, `currency`. Filas de listas Daval (`price_list_id` no nulo): únicas por `(product_id, price_list_id)`. Filas de SIIGO (`price_list_id` nulo): únicas por `(product_id, price_list_name)` |
 | `promotions` | Promociones | `kind` (`permanent`/`eventual`), `scope` (`all`/`specific`), `starts_at`, `ends_at` (nulo si es permanente), `active` |
 | `promotion_prices` | Precio promocional por SKU | `(promotion_id, sku)`, `price` |
@@ -130,6 +130,7 @@ Los eventos los crean **triggers** (`webhook_emit()`) sobre `quotations`, `quota
 | `016_credential_security` | `migrations/016_…` | `users.token_version` + trigger de revocación de sesiones; `api_keys.expires_at` y `replaced_by` |
 | `019_must_change_password` | `migrations/019_…` | `users.must_change_password` (cambio de contraseña obligatorio al primer ingreso) |
 | `020_price_list_rows` | `migrations/020_…` | La unicidad por nombre de `product_price_lists` aplica solo a las filas de SIIGO: una lista Daval con el mismo nombre que una de SIIGO ya no choca ni la pisa el sync |
+| `021_siigo_price_lists` | `migrations/021_…` | `price_lists.siigo_name`: lista Daval vinculada a cada lista de precios de SIIGO, asignable a clientes. Correrla **antes** de desplegar |
 | `seed_003_qa_demo` | `seeds/003_qa_demo.sql` | Datos de QA/demo para recorrer todas las pantallas y estados (solo con `--seed`). Usuarios con contraseñas conocidas: `migrate.js` lo aplica **solo contra localhost**, ni siquiera con `ALLOW_REMOTE_SEED=1`. Ver [Instalación local](../guias/instalacion-local.md#datos-de-qa-solo-base-local) |
 | `seed_002_integration_test` | `seeds/002_integration_test.sql` | Escenarios para probar integraciones (solo con `--seed`). Ver [Ambiente de pruebas](../guias/ambiente-de-pruebas.md) |
 | `seed_001_initial` | `seeds/001_initial.sql` | Datos de desarrollo (solo con `--seed`). Crea usuarios con contraseñas conocidas: `migrate.js` lo rechaza contra una base remota salvo `ALLOW_REMOTE_SEED=1`. **Nunca en producción** |

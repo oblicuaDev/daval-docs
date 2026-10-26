@@ -17,6 +17,7 @@ Implementado en `api/src/lib/pricing.js` → `resolvePrices({ productIds, priceL
 - Si es admin o asesor, se puede pasar `?priceListId=` en `GET /products`.
 - Si no hay lista (o está inactiva), se usa la lista con `is_default = TRUE`.
 - Las listas válidas son las de Daval (`price_lists` + `product_price_lists.price_list_id`). Las filas que la sincronización de SIIGO guarda solo con `price_list_name` no participan en el cálculo.
+- Las listas de precios de SIIGO (CONTADO, DISTRIBUIDORES, CRÉDITO) participan a través de su lista Daval vinculada (`price_lists.siigo_name`), que la sincronización crea y mantiene. Ver [SIIGO](../integraciones/siigo.md#listas-de-precios-de-siigo).
 
 ### 2. Se calcula el precio de lista
 

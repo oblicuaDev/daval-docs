@@ -26,6 +26,7 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
       "is_default": false,
       "isDefault": false,
       "active": true,
+      "siigoName": null,
       "scope": "selected",
       "productCount": 812,
       "pricesUpdatedAt": "2026-10-21T17:36:17.649Z",
@@ -39,6 +40,7 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
 |---|---|
 | `scope` | `all` si es la lista general (`isDefault`), `selected` si no |
 | `productCount` | Productos con precio en la lista. Con `0` la lista no se puede asignar |
+| `siigoName` | Nombre de la lista de precios de SIIGO vinculada (p. ej. `DISTRIBUIDORES`), o `null`. Sus precios los escribe la sincronización |
 | `pricesUpdatedAt` | Fecha del último precio cargado o modificado en la lista (`null` si no tiene precios) |
 | `clientIds` | IDs de **cliente** (`clients.id`, con o sin usuario de login) que tienen esta lista asignada |
 
@@ -153,8 +155,10 @@ Cada ítem identifica el producto por `productId` o por `sku`. Los SKU se buscan
 }
 ```
 
-**Respuesta `200`:** `{ "updated": 2, "total": 815, "mode": "merge", "notFound": [] }`, donde `updated` son los ítems cargados y `total` los productos con precio en la lista después de la carga. · **Errores:** `400` con un `mode` distinto de `replace`/`merge`, `404 NOT_FOUND` si la lista no existe, `422 PRICE_LIST_NO_MATCHES`, `422 PRICE_LIST_IN_USE`.
+**Respuesta `200`:** `{ "updated": 2, "total": 815, "mode": "merge", "notFound": [] }`, donde `updated` son los ítems cargados y `total` los productos con precio en la lista después de la carga. · **Errores:** `400` con un `mode` distinto de `replace`/`merge`, `404 NOT_FOUND` si la lista no existe, `409 PRICE_LIST_SIIGO_MANAGED` si la lista está vinculada a SIIGO (`siigoName`), `422 PRICE_LIST_NO_MATCHES`, `422 PRICE_LIST_IN_USE`.
 
 :::note[Precios de SIIGO]
-Los precios de las listas de SIIGO se guardan en la misma tabla, pero son filas aparte (sin `price_list_id`). Una lista de Daval puede llamarse igual que una de SIIGO (p. ej. «CONTADO»): la sincronización diaria no toca sus precios (migración 020).
+Cada lista de precios de SIIGO tiene una lista Daval vinculada (`siigoName`) que la sincronización crea y llena: se asigna a clientes con `PUT /api/price-lists/:id/clients` como cualquier otra, pero sus precios no se cargan por este endpoint. Ver [SIIGO](../integraciones/siigo.md#listas-de-precios-de-siigo).
+
+Además, la sincronización guarda una copia de los precios de SIIGO en filas aparte (sin `price_list_id`, por `price_list_name`). Una lista de Daval cargada por archivo puede llamarse igual que una de SIIGO: la sincronización no toca sus precios (migración 020).
 :::

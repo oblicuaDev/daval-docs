@@ -93,7 +93,18 @@ La sync se ejecuta **esperando el resultado** (no en segundo plano): en Vercel u
 | `active` | `active` |
 | `metadata.image_url` | `image_url` (solo si el producto no tiene imagen: la subida en DAVAL tiene prioridad) |
 | `account_group.name` (grupo de inventario) | `category_id`: se crea la categoría con ese nombre si no existe, y se asigna solo si el producto no tiene categoría |
-| cada `prices[0].price_list[]` | fila en `product_price_lists` por `price_list_name` (informativa: el precio de venta usa las listas de DAVAL) |
+| cada `prices[0].price_list[]` | fila en `product_price_lists` por `price_list_name` (copia tal cual de SIIGO) **y** precio en la lista DAVAL vinculada (ver abajo) |
+
+### Listas de precios de SIIGO
+
+Cada lista de precios de SIIGO (en Daval: **CONTADO**, **DISTRIBUIDORES**, **CREDITO Y FACT ELECTR**) tiene una lista de precios en DAVAL vinculada por `price_lists.siigo_name` (migración 021):
+
+- La sincronización la **crea** la primera vez que ve esa lista con algún precio mayor que 0. Si ya existe una lista DAVAL con el mismo nombre, la vinculada se llama `<nombre> (SIIGO)`. Se puede renombrar en el panel: el vínculo es por `siigo_name`.
+- En cada sincronización se **escriben sus precios** (los mayores que 0) y se **borran** los que SIIGO ya no manda para ese producto (precio quitado, en 0, o lista renombrada en SIIGO). Lo mismo con las filas copia por `price_list_name`.
+- El admin la asigna a clientes como cualquier otra lista y el precio de venta sale de ella ([reglas de negocio](../arquitectura/reglas-de-negocio.md)). Un producto sin precio en esa lista usa el precio base (CONTADO).
+- Sus precios **no se cargan por archivo** (`409 PRICE_LIST_SIIGO_MANAGED`): se cambian en SIIGO.
+- Si una lista se renombra en SIIGO, la sync crea una lista nueva y la vieja queda sin precios cuando pasa una sincronización completa: hay que reasignar sus clientes.
+- La incremental solo toca los productos modificados: tras activar esto, corre una sincronización **completa** para llenar las listas con todo el catálogo.
 
 Cada producto guarda `last_sync_at`. Los campos propios de DAVAL (`quality`, `description`) no se tocan, y una categoría asignada en DAVAL tampoco: la del grupo de SIIGO solo llena las vacías.
 

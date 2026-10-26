@@ -62,6 +62,14 @@ El botón **Importar Excel** es una demostración y todavía no procesa archivos
 
 Cada lista muestra a quién aplica, cuántos **clientes asignados** y **precios cargados** tiene, y la fecha de su **última actualización**.
 
+### Listas que vienen de SIIGO
+
+Las listas de precios de SIIGO (**CONTADO**, **DISTRIBUIDORES** y **CREDITO Y FACT ELECTR**) aparecen solas, con la etiqueta **SIIGO**. La sincronización con SIIGO las crea y actualiza sus precios todos los días.
+
+- Para que un cliente compre a precio de distribuidor o de crédito, pulsa el lápiz de esa lista y márcalo en **Clientes seleccionados**.
+- Sus precios no se cargan por archivo: si un precio está mal, corrígelo en SIIGO y espera la próxima sincronización (o lánzala desde **Integraciones**).
+- Si un producto no tiene precio en esa lista en SIIGO, el cliente ve el precio base (el de contado).
+
 ### Ver los precios de una lista
 
 Pulsa **Ver precios** en la tarjeta de la lista. Verás cada producto con su SKU, el **precio base** (el de SIIGO), el **precio de la lista** y la diferencia en porcentaje (verde si la lista es más barata). Puedes buscar por SKU o nombre y pulsar **Descargar lista** para bajar todos sus precios en el mismo formato de la plantilla.

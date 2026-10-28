@@ -5,7 +5,7 @@ title: Tu panel de cotizaciones
 
 # Tu panel de cotizaciones
 
-Como asesor comercial, tu menú lateral tiene tres opciones: **Mis Cotizaciones**, **Mis Clientes** y **Mis Empresas**. Solo ves la información de los clientes y sucursales que DAVAL te asignó.
+Como asesor comercial, tu menú lateral tiene cuatro opciones: **Mis Cotizaciones**, **Mis Clientes**, **Mis Empresas** y **Listas de Precios**. Solo ves la información de los clientes y sucursales que DAVAL te asignó.
 
 ## Mis Cotizaciones
 
@@ -60,6 +60,32 @@ Pulsa un cliente para ver su **Historial de cotizaciones**: código, fecha, íte
 Empresas que tienen al menos una sucursal asignada a ti. Busca por **nombre o NIT**. En cada empresa ves **Mis sucursales** (las que te corresponden), cuántos clientes y cotizaciones tiene y el total vendido.
 
 ![Mis Empresas](/img/manual/asesor/empresas.png)
+
+## Listas de Precios
+
+Aquí creas y mantienes los precios de tus clientes. La web y el chatbot de WhatsApp cotizan con la lista que tenga asignada cada cliente, así que mantenerla al día evita cotizaciones con precios incorrectos.
+
+Solo ves las listas de las que eres responsable. Cada tarjeta muestra cuántos productos tienen precio, cuántos clientes la usan y cuándo se actualizó.
+
+### Crear una lista
+
+1. Pulsa **Nueva lista** y escribe un nombre (no puede repetirse).
+2. En **Productos y precios**, busca por nombre o SKU (mínimo 2 letras) y pulsa **Agregar**. El producto entra con su precio base para que lo ajustes.
+3. Escribe el precio de cada producto. Debe ser un número **mayor que cero**; los precios inválidos se marcan en rojo. Con el ícono de la papelera quitas un producto.
+4. En **Clientes con esta lista**, marca los clientes que la van a usar. Solo aparecen tus clientes; si alguno ya tiene otra lista, se muestra como *Lista actual*.
+5. Pulsa **Crear lista**.
+
+El botón no se activa mientras falte el nombre, no haya productos o algún precio no sea válido: una lista sin productos y precios válidos no se puede guardar.
+
+### Editar una lista
+
+Pulsa el lápiz de la lista. Puedes cambiar el nombre, los precios, agregar o quitar productos y cambiar los clientes. Pulsa **Guardar cambios**: la lista queda exactamente como la ves.
+
+:::info[Al asignar y quitar clientes]
+Asignar tu lista a un cliente reemplaza la que tenía. Si desmarcas un cliente, vuelve a la lista general de DAVAL.
+:::
+
+El administrador ve todas las listas con su asesor responsable y puede reasignarlas. Borrar una lista solo lo puede hacer el administrador.
 
 ## Correos que vas a recibir
 

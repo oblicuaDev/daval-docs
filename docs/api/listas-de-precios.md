@@ -9,9 +9,25 @@ Archivo: `api/src/routes/admin.js` (router `priceLists`) · Prefijo: `/api/price
 
 Una lista de precios define cuánto paga un cliente. Cada producto puede tener un **precio específico** en la lista; si no lo tiene, se calcula como `base_price × multiplier`. Ver [Reglas de negocio → Precios](../arquitectura/reglas-de-negocio.md#precios).
 
+## Permisos: admin y asesor
+
+Los endpoints aceptan **admin** y **advisor** (salvo `DELETE`, solo admin). Un cliente recibe `403`.
+
+| | Admin | Asesor |
+|---|---|---|
+| Ver listas | Todas | Solo las suyas (`advisorId` = el asesor). Una lista ajena responde `404 NOT_FOUND` en todos los endpoints |
+| Crear | Con o sin productos; elige `advisorId` | Siempre con `items` (al menos uno) y queda como responsable |
+| Precios | `price >= 0` | `price > 0` |
+| Editar | Todos los campos | Solo `name` y `description` |
+| Vaciar la lista | Si no tiene clientes ni es la general | Nunca (`422 PRICE_LIST_EMPTY`) |
+| Asignar | `all` o `selected`, cualquier cliente | Solo `selected` y solo a sus clientes (`clients.advisor_id`) |
+| Borrar | Sí | No |
+
+Las listas de un asesor son listas Daval normales: la web y el [chatbot](./integraciones-chatbot.md) cotizan con ellas igual que con cualquier otra lista asignada al cliente.
+
 ## `GET /api/price-lists`
 
-**Acceso:** Autenticado
+**Acceso:** admin, advisor (el asesor solo recibe sus listas y, en cada una, solo sus clientes)
 
 **Respuesta `200`**
 
@@ -27,6 +43,8 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
       "isDefault": false,
       "active": true,
       "siigoName": null,
+      "advisorId": "<users.id>",
+      "advisorName": "Laura Gómez",
       "scope": "selected",
       "productCount": 812,
       "pricesUpdatedAt": "2026-10-21T17:36:17.649Z",
@@ -42,15 +60,21 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
 | `productCount` | Productos con precio en la lista. Con `0` la lista no se puede asignar |
 | `siigoName` | Nombre de la lista de precios de SIIGO vinculada (p. ej. `DISTRIBUIDORES`), o `null`. Sus precios los escribe la sincronización |
 | `pricesUpdatedAt` | Fecha del último precio cargado o modificado en la lista (`null` si no tiene precios) |
+| `advisorId`, `advisorName` | Asesor responsable de la lista, o `null` si es del administrador |
 | `clientIds` | IDs de **cliente** (`clients.id`, con o sin usuario de login) que tienen esta lista asignada |
+| `clients` | Solo para el asesor: `[{ "id", "name" }]` de sus clientes con la lista |
 
 ## `POST /api/price-lists`
 
-**Acceso:** admin
+**Acceso:** admin, advisor
+
+Crea la lista y, si vienen `items`, sus precios en la **misma transacción** (nunca queda creada a medias).
 
 | Campo | Tipo | Requerido | Por defecto |
 |---|---|---|---|
-| `name` | string | Sí (único) | |
+| `name` | string | Sí (único, sin distinguir mayúsculas) | |
+| `items` | `[{ productId \| sku, price }]` | Sí para el asesor (al menos uno, `price > 0`) | `[]` |
+| `advisorId` | uuid \| null | No (solo admin; el asesor queda siempre como responsable) | `null` |
 | `description` | string | No | |
 | `multiplier` | número > 0 | No | 1 |
 | `isDefault` | boolean | No | `false` |
@@ -58,13 +82,17 @@ Una lista de precios define cuánto paga un cliente. Cada producto puede tener u
 
 Solo puede existir **una** lista con `isDefault = true` (índice único parcial). Para cambiar la lista por defecto, desmarca primero la actual.
 
-**Respuesta `201`:** `{ "id": "<uuid>" }`
+El asesor no puede crear la lista general (`isDefault` se ignora).
+
+**Respuesta `201`:** `{ "id": "<uuid>", "total": 2, "notFound": [] }`
+
+**Errores:** `409 PRICE_LIST_NAME_TAKEN`, `422 PRICE_LIST_EMPTY` (asesor sin `items`), `422 PRICE_LIST_NO_MATCHES`, `422 ADVISOR_NOT_FOUND`, `400 VALIDATION_ERROR` (p. ej. precio `0` de un asesor).
 
 ## `PUT /api/price-lists/:id/clients`
 
 Define a quién aplica la lista.
 
-**Acceso:** admin
+**Acceso:** admin, advisor. El asesor solo puede usar `selected`, con clientes suyos (`403 CLIENT_NOT_ASSIGNED` si alguno no lo es; `403 FORBIDDEN` con `all`), y quitar la lista solo afecta a sus clientes.
 
 **Body**
 
@@ -87,9 +115,9 @@ Una lista sin productos no se puede asignar por ningún camino: aquí, en [`/api
 
 ## `PUT /api/price-lists/:id`
 
-**Acceso:** admin. Mismos campos, opcionales (`COALESCE`). Al renombrar, los precios de la lista se conservan.
+**Acceso:** admin (todos los campos, opcionales; `advisorId: null` quita el responsable), advisor (solo `name` y `description` de sus listas; el resto se ignora). Al renombrar, los precios de la lista se conservan.
 
-**Respuesta `200`:** `{ "id": "<uuid>" }` · **Errores:** `404 NOT_FOUND`.
+**Respuesta `200`:** `{ "id": "<uuid>" }` · **Errores:** `404 NOT_FOUND`, `409 PRICE_LIST_NAME_TAKEN`, `422 ADVISOR_NOT_FOUND`.
 
 ## `DELETE /api/price-lists/:id`
 
@@ -103,7 +131,7 @@ Borra la lista y sus precios específicos. Los clientes que la usaban quedan sin
 
 Todos los productos con su precio base y, si existe, su precio específico en esta lista.
 
-**Acceso:** Autenticado
+**Acceso:** admin, advisor (solo sus listas)
 
 | Query | Descripción |
 |---|---|
@@ -139,9 +167,9 @@ Carga precios específicos en la lista, en una transacción. El campo `mode` def
 | `replace` (por defecto) | La lista queda **exactamente** con los ítems enviados: los demás precios se eliminan. Enviar `items: []` vacía la lista, salvo que tenga clientes o sea la general (`422 PRICE_LIST_IN_USE`) |
 | `merge` | Actualiza el precio de los productos enviados y agrega los nuevos. Los demás precios de la lista **se conservan** |
 
-Cada ítem identifica el producto por `productId` o por `sku`. Los SKU se buscan en todo el catálogo; los que no existen se omiten y se devuelven en `notFound`. Si ninguno coincide, responde `422 PRICE_LIST_NO_MATCHES` con `details.notFound`.
+Cada ítem identifica el producto por `productId` o por `sku`. Se buscan en todo el catálogo; los que no existen se omiten y se devuelven en `notFound`. Si ninguno coincide, responde `422 PRICE_LIST_NO_MATCHES` con `details.notFound`.
 
-**Acceso:** admin
+**Acceso:** admin, advisor (solo sus listas, `price > 0`, y la lista no puede quedar vacía: `422 PRICE_LIST_EMPTY`)
 
 **Body**
 

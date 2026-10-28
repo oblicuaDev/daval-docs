@@ -62,6 +62,10 @@ El botón **Importar Excel** es una demostración y todavía no procesa archivos
 
 Cada lista muestra a quién aplica, cuántos **clientes asignados** y **precios cargados** tiene, y la fecha de su **última actualización**.
 
+### Listas de los asesores
+
+Los asesores crean y editan sus propias listas desde su panel (**Listas de Precios**) y las asignan a sus clientes. Aquí aparecen con la línea **Asesor: …**. En el formulario de cualquier lista, el campo **Asesor responsable** define qué asesor la ve y la puede editar; con *Ninguno* la lista es solo del administrador. Solo el administrador puede borrar listas.
+
 ### Listas que vienen de SIIGO
 
 Las listas de precios de SIIGO (**CONTADO**, **DISTRIBUIDORES** y **CREDITO Y FACT ELECTR**) aparecen solas, con la etiqueta **SIIGO**. La sincronización con SIIGO las crea y actualiza sus precios todos los días.
